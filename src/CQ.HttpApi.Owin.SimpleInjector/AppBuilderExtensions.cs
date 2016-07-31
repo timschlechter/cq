@@ -6,7 +6,7 @@ namespace CQ.HttpApi.Owin.SimpleInjector
 {
     public static class AppBuilderExtensions
     {
-        public static CQAppBuilder UseCQ(this IAppBuilder app, Container container, HttpApiSettings settings = null)
+        public static CQAppBuilderDecorator UseCQ(this IAppBuilder app, Container container, HttpApiSettings settings = null)
         {
             var commandTypes = container.GetCommandTypes();
             var queryTypes = container.GetQueryTypes();

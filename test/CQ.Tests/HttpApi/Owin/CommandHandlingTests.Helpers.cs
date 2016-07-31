@@ -20,7 +20,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
             public Guid Id { get; set; }
         }
 
-        protected override void Configure(CQAppBuilder app)
+        protected override void Configure(CQAppBuilderDecorator app)
         {
             HandledCommands = new List<TestCommand>();
 

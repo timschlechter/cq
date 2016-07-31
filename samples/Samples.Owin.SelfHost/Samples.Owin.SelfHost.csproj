@@ -87,6 +87,10 @@
       <Project>{51ae49f2-58c0-48e2-9d0f-fa921adf963b}</Project>
       <Name>CQ.HttpApi.Owin.SimpleInjector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\CQ.HttpApi.Owin.Swagger\CQ.HttpApi.Owin.Swagger.csproj">
+      <Project>{9E175235-B19F-47CD-B607-395AD980C2D0}</Project>
+      <Name>CQ.HttpApi.Owin.Swagger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\CQ.HttpApi\CQ.HttpApi.csproj">
       <Project>{61524EBF-325E-4B5F-AF61-D0CAB5F009D6}</Project>
       <Name>CQ.HttpApi</Name>

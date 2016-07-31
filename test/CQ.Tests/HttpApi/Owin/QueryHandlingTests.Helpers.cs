@@ -26,7 +26,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
         {
         }
 
-        protected override void Configure(CQAppBuilder app)
+        protected override void Configure(CQAppBuilderDecorator app)
         {
             HandledQueries = new Dictionary<TestQuery, object>();
 

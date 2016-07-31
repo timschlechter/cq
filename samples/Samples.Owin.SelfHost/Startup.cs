@@ -1,6 +1,7 @@
 using System.Reflection;
 using CQ;
 using CQ.HttpApi.Owin.SimpleInjector;
+using CQ.HttpApi.Owin.Swagger;
 using Owin;
 using Samples.Business.CommandHandlers;
 using Samples.Business.QueryHandlers;
@@ -18,7 +19,8 @@ namespace Sample.Owin.SelfHost
         {
             var container = ConfigureContainer(app);
 
-            app.UseCQ(container);
+            app.UseCQ(container)
+                .EnableSwagger();
         }
 
         protected Container ConfigureContainer(IAppBuilder app)

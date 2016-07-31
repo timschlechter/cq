@@ -22,7 +22,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
             _httpApiClient = new HttpApiClient(RootUrl);
         }
 
-        protected abstract void Configure(CQAppBuilder app);
+        protected abstract void Configure(CQAppBuilderDecorator app);
 
 
         [TearDown]

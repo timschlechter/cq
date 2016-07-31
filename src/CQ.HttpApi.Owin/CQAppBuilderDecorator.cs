@@ -9,35 +9,37 @@ using Owin;
 
 namespace CQ.HttpApi.Owin
 {
-    public class CQAppBuilder : IAppBuilder
+    public class CQAppBuilderDecorator : IAppBuilder
     {
-        private readonly IAppBuilder _app;
-        private readonly HttpApiSettings _settings;
 
         private Type[] _knownCommands;
         private Type[] _knownQueries;
 
-        public CQAppBuilder(IAppBuilder app, HttpApiSettings settings)
+        public CQAppBuilderDecorator(IAppBuilder decoratedApp, HttpApiSettings settings)
         {
-            _app = app;
-            _settings = settings ?? HttpApiSettings.Default;
+            DecoratedApp = decoratedApp;
+            Settings = settings ?? HttpApiSettings.Default;
         }
 
-        public IAppBuilder Use(object middleware, params object[] args) => _app.Use(middleware, args);
+        public IAppBuilder DecoratedApp { get; }
 
-        public object Build(Type returnType) => _app.Build(returnType);
+        public HttpApiSettings Settings { get; }
 
-        public IAppBuilder New() => _app.New();
+        public IAppBuilder Use(object middleware, params object[] args) => DecoratedApp.Use(middleware, args);
 
-        public IDictionary<string, object> Properties => _app.Properties;
+        public object Build(Type returnType) => DecoratedApp.Build(returnType);
 
-        public CQAppBuilder EnableCommandHandling(IEnumerable<Type> knownCommands, Action<object> handleCommand)
+        public IAppBuilder New() => DecoratedApp.New();
+
+        public IDictionary<string, object> Properties => DecoratedApp.Properties;
+
+        public CQAppBuilderDecorator EnableCommandHandling(IEnumerable<Type> knownCommands, Action<object> handleCommand)
         {
             _knownCommands = (knownCommands ?? Enumerable.Empty<Type>()).ToArray();
-            _app.Use(async (context, next) =>
+            DecoratedApp.Use(async (context, next) =>
             {
                 var commandType = GetCommandType(context);
-                var command = _settings.JsonSerializer.Deserialize(context.Request.Body, commandType);
+                var command = Settings.JsonSerializer.Deserialize(context.Request.Body, commandType);
 
                 handleCommand(command);
 
@@ -46,10 +48,10 @@ namespace CQ.HttpApi.Owin
             return this;
         }
 
-        public CQAppBuilder EnableQueryHandling(IEnumerable<Type> knownQueries, Func<object, object> handleQuery)
+        public CQAppBuilderDecorator EnableQueryHandling(IEnumerable<Type> knownQueries, Func<object, object> handleQuery)
         {
             _knownQueries = (knownQueries ?? Enumerable.Empty<Type>()).ToArray();
-            _app.Use(async (context, next) =>
+            DecoratedApp.Use(async (context, next) =>
             {
                 var queryType = GetQueryType(context);
 
@@ -61,16 +63,16 @@ namespace CQ.HttpApi.Owin
 
                 using (var stream = new MemoryStream())
                 {
-                    _settings.JsonSerializer.Serialize(eo, stream);
+                    Settings.JsonSerializer.Serialize(eo, stream);
 
                     stream.Position = 0;
 
-                    var query = _settings.JsonSerializer.Deserialize(stream, queryType);
+                    var query = Settings.JsonSerializer.Deserialize(stream, queryType);
 
                     var result = handleQuery(query);
 
                     context.Response.ContentType = "application/json";
-                    _settings.JsonSerializer.Serialize(result, context.Response.Body);
+                    Settings.JsonSerializer.Serialize(result, context.Response.Body);
                 }
 
                 await next();
@@ -92,14 +94,14 @@ namespace CQ.HttpApi.Owin
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return _settings.PathResolver.FindCommandTypeByPath(path, _knownCommands);
+            return Settings.PathResolver.FindCommandTypeByPath(path, _knownCommands);
         }
 
         private Type GetQueryType(IOwinContext context)
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return _settings.PathResolver.FindQueryTypeByPath(path, _knownQueries);
+            return Settings.PathResolver.FindQueryTypeByPath(path, _knownQueries);
         }
     }
 }
