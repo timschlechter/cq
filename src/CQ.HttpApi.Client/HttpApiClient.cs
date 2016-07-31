@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CQ.HttpApi;
 using CQ.HttpApi.JsonSerialization;
-using CQ.HttpApi.PathResolving;
+using CQ.HttpApi.RouteResolving;
 using RestSharp;
 
 namespace CQ.Client
@@ -18,14 +18,14 @@ namespace CQ.Client
         {
             _rootUrl = rootUrl;
             _settings = settings ?? HttpApiSettings.Default;
-            _settings.CommandPathResolver = _settings.CommandPathResolver ?? HttpApiSettings.Default.CommandPathResolver;
-            _settings.QueryPathResolver = _settings.QueryPathResolver ?? HttpApiSettings.Default.QueryPathResolver;
+            _settings.CommandRouteResolver = _settings.CommandRouteResolver ?? HttpApiSettings.Default.CommandRouteResolver;
+            _settings.QueryRouteResolver = _settings.QueryRouteResolver ?? HttpApiSettings.Default.QueryRouteResolver;
             _settings.JsonSerializer = _settings.JsonSerializer ?? new SimpleJsonSerializer();
         }
 
         public Task ExecuteCommand<TCommand>(TCommand command)
         {
-            var path = _settings.CommandPathResolver.ResolvePath(command);
+            var path = _settings.CommandRouteResolver.ResolvePath(command);
             var req = new RestRequest(path)
             {
                 Method = Method.POST
@@ -39,7 +39,7 @@ namespace CQ.Client
 
         public Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
-            var path = _settings.QueryPathResolver.ResolvePath(query);
+            var path = _settings.QueryRouteResolver.ResolvePath(query);
             var req = new RestRequest(path)
             {
                 Method = Method.GET

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using CQ.HttpApi.PathResolving;
+using CQ.HttpApi.RouteResolving;
 using Microsoft.Owin;
 using Owin;
 
@@ -93,14 +93,14 @@ namespace CQ.HttpApi.Owin
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return _commandTypes.FindTypeByPath(path, Settings.CommandPathResolver);
+            return _commandTypes.FindTypeByPath(path, Settings.CommandRouteResolver);
         }
 
         private Type GetQueryType(IOwinContext context)
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return _queryTypes.FindTypeByPath(path, Settings.QueryPathResolver);
+            return _queryTypes.FindTypeByPath(path, Settings.QueryRouteResolver);
         }
     }
 }

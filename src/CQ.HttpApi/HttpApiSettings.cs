@@ -1,5 +1,5 @@
 ﻿using CQ.HttpApi.JsonSerialization;
-using CQ.HttpApi.PathResolving;
+using CQ.HttpApi.RouteResolving;
 
 namespace CQ.HttpApi
 {
@@ -7,15 +7,15 @@ namespace CQ.HttpApi
     {
         public static readonly HttpApiSettings Default = new HttpApiSettings
         {
-            CommandPathResolver = new SimpleCommandPathResolver(),
-            QueryPathResolver = new SimpleQueryPathResolver(),
+            CommandRouteResolver = new SimpleCommandRouteResolver(),
+            QueryRouteResolver = new SimpleQueryRouteResolver(),
             JsonSerializer = new SimpleJsonSerializer()
         };
 
         public IJsonSerializer JsonSerializer { get; set; }
 
-        public IPathResolver CommandPathResolver { get; set; }
+        public IRouteResolver CommandRouteResolver { get; set; }
 
-        public IPathResolver QueryPathResolver { get; set; }
+        public IRouteResolver QueryRouteResolver { get; set; }
     }
 }
