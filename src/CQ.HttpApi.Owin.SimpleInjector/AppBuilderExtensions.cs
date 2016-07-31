@@ -28,9 +28,7 @@ namespace CQ.HttpApi.Owin.SimpleInjector
                     commandHandlerType => commandHandlerType.GetCommandType(),
                     commandHandlerType =>
                     {
-                        var commandType = commandHandlerType.GetCommandType();
-                        var methodInfo = commandHandlerType.GetMethod("Handle");
-                        var handleMethodInfo = methodInfo.MakeGenericMethod(commandType);
+                        var handleMethodInfo = commandHandlerType.GetMethod("Handle");
 
                         Action<object> handle = command =>
                         {
@@ -72,9 +70,7 @@ namespace CQ.HttpApi.Owin.SimpleInjector
                     queryHandlerType => queryHandlerType.GetQueryType(),
                     queryHandlerType =>
                     {
-                        var queryType = queryHandlerType.GetQueryType();
-                        var methodInfo = queryHandlerType.GetMethod("Handle");
-                        var handleMethodInfo = methodInfo.MakeGenericMethod(queryType);
+                        var handleMethodInfo = queryHandlerType.GetMethod("Handle");
 
                         Func<object, object> handle = query =>
                         {

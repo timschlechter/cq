@@ -20,7 +20,7 @@ namespace Sample.Owin.SelfHost
             var container = ConfigureContainer(app);
 
             app.UseCQ(container)
-                .EnableSwagger();
+                .EnableSwagger("/swagger");
         }
 
         protected Container ConfigureContainer(IAppBuilder app)

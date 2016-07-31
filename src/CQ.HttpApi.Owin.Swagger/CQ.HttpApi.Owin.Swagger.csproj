@@ -70,6 +70,7 @@
     <Compile Include="Model\Tag.cs" />
     <Compile Include="Model\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleJson.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CQ.HttpApi.Owin\CQ.HttpApi.Owin.csproj">

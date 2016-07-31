@@ -24,13 +24,13 @@ namespace CQ.HttpApi.Owin.SimpleInjector
         public static IEnumerable<Type> GetKnownCommandTypes(this Container container)
         {
             return container.GetCommandHandlerRegistrations()
-                .Select(instanceProducer => instanceProducer.ServiceType.GetGenericArguments().Single());
+                .Select(instanceProducer => instanceProducer.ServiceType.GetGenericArguments().FirstOrDefault());
         }
 
         public static IEnumerable<Type> GetKnownQueryTypes(this Container container)
         {
             return container.GetQueryHandlerRegistrations()
-                 .Select(instanceProducer => instanceProducer.ServiceType.GetGenericArguments().Single());
+                 .Select(instanceProducer => instanceProducer.ServiceType.GetGenericArguments().FirstOrDefault());
         }
 
         public static IEnumerable<Type> GetKnownCommandHandlerTypes(this Container container)
