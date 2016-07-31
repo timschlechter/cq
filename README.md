@@ -1,4 +1,5 @@
-# CQ experiment
+# CQ experiment [![Build status](https://ci.appveyor.com/api/projects/status/8g1yay3g2xycf7fq/branch/master?svg=true)](https://ci.appveyor.com/project/TimSchlechter/cq/branch/master)
+
 
 This repository contain experimental code. It is used to test some reusable libraries which can be used to create applications including APIs in which Commands and Queries are first class citizens. The handling of both is explicitly separated.
 
