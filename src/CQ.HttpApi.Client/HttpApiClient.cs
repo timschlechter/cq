@@ -17,15 +17,15 @@ namespace CQ.Client
         public HttpApiClient(string rootUrl, HttpApiSettings settings = null)
         {
             _rootUrl = rootUrl;
-            _settings = settings ?? new HttpApiSettings();
-
-            _settings.PathResolver = _settings.PathResolver ?? new SimplePathResolver();
+            _settings = settings ?? HttpApiSettings.Default;
+            _settings.CommandPathResolver = _settings.CommandPathResolver ?? HttpApiSettings.Default.CommandPathResolver;
+            _settings.QueryPathResolver = _settings.QueryPathResolver ?? HttpApiSettings.Default.QueryPathResolver;
             _settings.JsonSerializer = _settings.JsonSerializer ?? new SimpleJsonSerializer();
         }
 
         public Task ExecuteCommand<TCommand>(TCommand command)
         {
-            var path = _settings.PathResolver.GetCommandPath(command);
+            var path = _settings.CommandPathResolver.ResolvePath(command);
             var req = new RestRequest(path)
             {
                 Method = Method.POST
@@ -39,7 +39,7 @@ namespace CQ.Client
 
         public Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
-            var path = _settings.PathResolver.GetQueryPath(query);
+            var path = _settings.QueryPathResolver.ResolvePath(query);
             var req = new RestRequest(path)
             {
                 Method = Method.GET

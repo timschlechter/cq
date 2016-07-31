@@ -7,12 +7,15 @@ namespace CQ.HttpApi
     {
         public static readonly HttpApiSettings Default = new HttpApiSettings
         {
-            PathResolver = new SimplePathResolver(),
+            CommandPathResolver = new SimpleCommandPathResolver(),
+            QueryPathResolver = new SimpleQueryPathResolver(),
             JsonSerializer = new SimpleJsonSerializer()
         };
 
         public IJsonSerializer JsonSerializer { get; set; }
 
-        public IPathResolver PathResolver { get; set; }
+        public IPathResolver CommandPathResolver { get; set; }
+
+        public IPathResolver QueryPathResolver { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.Serialization;
 
-namespace CQ.Client
+namespace CQ.HttpApi
 {
     [Serializable]
     public class HttpApiException : Exception

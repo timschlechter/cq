@@ -11,9 +11,8 @@ namespace CQ.HttpApi.Owin
 {
     public class CQAppBuilderDecorator : IAppBuilder
     {
-
-        private Type[] _knownCommands;
-        private Type[] _knownQueries;
+        private Type[] _commandTypes;
+        private Type[] _queryTypes;
 
         public CQAppBuilderDecorator(IAppBuilder decoratedApp, HttpApiSettings settings)
         {
@@ -33,9 +32,9 @@ namespace CQ.HttpApi.Owin
 
         public IDictionary<string, object> Properties => DecoratedApp.Properties;
 
-        public CQAppBuilderDecorator EnableCommandHandling(IEnumerable<Type> knownCommands, Action<object> handleCommand)
+        public CQAppBuilderDecorator EnableCommandHandling(IEnumerable<Type> commandTypes, Action<object> handleCommand)
         {
-            _knownCommands = (knownCommands ?? Enumerable.Empty<Type>()).ToArray();
+            _commandTypes = (commandTypes ?? Enumerable.Empty<Type>()).ToArray();
             DecoratedApp.Use(async (context, next) =>
             {
                 var commandType = GetCommandType(context);
@@ -48,9 +47,9 @@ namespace CQ.HttpApi.Owin
             return this;
         }
 
-        public CQAppBuilderDecorator EnableQueryHandling(IEnumerable<Type> knownQueries, Func<object, object> handleQuery)
+        public CQAppBuilderDecorator EnableQueryHandling(IEnumerable<Type> queryTypes, Func<object, object> handleQuery)
         {
-            _knownQueries = (knownQueries ?? Enumerable.Empty<Type>()).ToArray();
+            _queryTypes = (queryTypes ?? Enumerable.Empty<Type>()).ToArray();
             DecoratedApp.Use(async (context, next) =>
             {
                 var queryType = GetQueryType(context);
@@ -94,14 +93,14 @@ namespace CQ.HttpApi.Owin
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return Settings.PathResolver.FindCommandTypeByPath(path, _knownCommands);
+            return _commandTypes.FindTypeByPath(path, Settings.CommandPathResolver);
         }
 
         private Type GetQueryType(IOwinContext context)
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
 
-            return Settings.PathResolver.FindQueryTypeByPath(path, _knownQueries);
+            return _queryTypes.FindTypeByPath(path, Settings.QueryPathResolver);
         }
     }
 }
