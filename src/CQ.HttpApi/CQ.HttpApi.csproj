@@ -46,7 +46,7 @@
     </Compile>
     <Compile Include="HttpApiException.cs" />
     <Compile Include="RouteResolving\RouteResolverExtensions.cs" />
-    <Compile Include="HttpApiSettings.cs" />
+    <Compile Include="HttpApiConfig.cs" />
     <Compile Include="JsonSerialization\SimpleJsonSerializer.cs" />
     <Compile Include="RouteResolving\SimpleCommandRouteResolver.cs" />
     <Compile Include="JsonSerialization\IJsonSerializer.cs" />

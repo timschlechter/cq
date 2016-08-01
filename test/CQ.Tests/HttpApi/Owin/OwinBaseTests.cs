@@ -8,11 +8,10 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
 {
     public abstract class OwinBaseTests
     {
+        [ThreadStatic] private static IDisposable _app;
+        [ThreadStatic] private static HttpApiClient _httpApiClient;
+
         private readonly string RootUrl = "http://localhost:12345";
-        private IDisposable _app;
-
-        private HttpApiClient _httpApiClient { get; set; }
-
 
         [SetUp]
         public virtual void SetUp()
@@ -34,10 +33,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
                 _app = null;
             }
 
-            if (_httpApiClient != null)
-            {
-                _httpApiClient = null;
-            }
+            _httpApiClient = null;
         }
 
 
