@@ -9,4 +9,4 @@ This is heavily inspired by the work of [@dotnetjunkie](https://github.com/dotne
   - [Meanwhile... on the query side of my architecture](https://www.cuttingedge.it/blogs/steven/pivot/entry.php?id=92)
   - [Solid Services: Reference architecture application for .NET that demonstrates how to build highly maintainable web services](https://github.com/dotnetjunkie/solidservices)
   
-Project's NuGet package feed: https://ci.appveyor.com/nuget/cq/Packages
+Project's NuGet package feed: https://ci.appveyor.com/nuget/cq
