@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Net;
 
 namespace CQ.HttpApi
 {
@@ -9,12 +11,12 @@ namespace CQ.HttpApi
     {
         private static readonly string Separator = ".";
 
-        public static ILookup<string, dynamic> Flatten(object value)
+        public static ILookup<string, object> Flatten(object value)
         {
-            return Flatten(value, null).ToLookup(kvp =>kvp.Key, kvp=> kvp.Value);
+            return Flatten(value, null).ToLookup(kvp => kvp.Key, kvp => kvp.Value);
         }
 
-        private static IList<KeyValuePair<string, dynamic>> Flatten(dynamic value, string namePrefix)
+        private static IList<KeyValuePair<string, object>> Flatten(object value, string namePrefix)
         {
             if (value == null)
             {
@@ -65,16 +67,20 @@ namespace CQ.HttpApi
             return result;
         }
 
-        public static dynamic Expand(IDictionary<string, object> valueCollection)
+        public static dynamic Expand(IEnumerable<KeyValuePair<string, object>> valueCollection)
         {
+            var valueCollectionLookup = valueCollection.ToLookup(kvp => kvp.Key, kvp => kvp.Value);
             var result = new ExpandoObject() as IDictionary<string, object>;
 
-            var complexProperties = new Dictionary<string, IDictionary<string, object>>();
+            var complexProperties = new Dictionary<string, IList<KeyValuePair<string, object>>>();
 
-            foreach (var key in valueCollection.Keys)
+            foreach (var group in valueCollectionLookup)
             {
-                var value = valueCollection[key];
+                var key = group.Key;
                 var parts = key.Split(Separator[0]);
+
+
+                var value = valueCollectionLookup[key].First();
                 if (parts.Length == 1)
                 {
                     result.Add(key, value);
@@ -85,9 +91,9 @@ namespace CQ.HttpApi
 
                     if (!complexProperties.ContainsKey(propertyName))
                     {
-                        complexProperties.Add(propertyName, new Dictionary<string, object>());
+                        complexProperties.Add(propertyName, new List<KeyValuePair<string, object>>());
                     }
-                    complexProperties[propertyName].Add(string.Join(Separator, parts.Skip(1)), value);
+                    complexProperties[propertyName].Add(new KeyValuePair<string, object>(string.Join(Separator, parts.Skip(1)), value));
                 }
             }
 
@@ -97,6 +103,25 @@ namespace CQ.HttpApi
             }
 
             return result;
+        }
+
+        public static object ExpandQueryString(string queryString)
+        {
+            var parameters = queryString
+                .Replace("?", "")
+                .Split('&')
+                .Where(item => !string.IsNullOrEmpty(item))
+                .Select(item =>
+                {
+                    var parts = item.Split('=');
+                    var name = parts[0];
+
+
+                    var value = parts[1];
+                    return new KeyValuePair<string, object>(name, WebUtility.UrlDecode(value));
+                });
+
+            return Expand(parameters);
         }
     }
 }

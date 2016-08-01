@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.IO;
 using System.Linq;
+using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 using Microsoft.Owin;
 using Owin;
@@ -52,22 +51,14 @@ namespace CQ.HttpApi.Owin
                     var parameters = context.Request.Query
                         .ToDictionary(
                             kvp => kvp.Key.EndsWith("[]") ? kvp.Key.Substring(0, kvp.Key.Length - 2) : kvp.Key,
-                            kvp => kvp.Key.EndsWith("[]") ? (object)kvp.Value : kvp.Value.FirstOrDefault());
-                    dynamic eo = ObjectHelper.Expand(parameters);
+                            kvp => kvp.Key.EndsWith("[]") ? (object) kvp.Value : kvp.Value.FirstOrDefault());
 
-                    using (var stream = new MemoryStream())
-                    {
-                        JsonSerializer.Serialize(eo, stream);
+                    var eo = ObjectHelper.Expand(parameters);
 
-                        stream.Position = 0;
-
-                        var query = JsonSerializer.Deserialize(stream, queryType);
-
-                        var result = handleQuery(query);
-
-                        context.Response.ContentType = "application/json";
-                        JsonSerializer.Serialize(result, context.Response.Body);
-                    }
+                    var query = JsonSerializer.MakeStronglyTyped((object)eo, queryType);
+                    var result = handleQuery(query);
+                    context.Response.ContentType = "application/json";
+                    JsonSerializer.Serialize(result, context.Response.Body);
                 }
                 await next();
             });

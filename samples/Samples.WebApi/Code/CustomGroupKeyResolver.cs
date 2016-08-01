@@ -16,15 +16,5 @@ namespace Samples.WebApi.Code
 
             return result.Substring(0, result.IndexOf(".", StringComparison.InvariantCulture));
         }
-
-        public string ResolveRoutePath(Type type)
-        {
-            return "Api/" + type.FullName.Replace(".", "/")
-                .Replace("Contracts/", "")
-                .Replace("Queries/", "")
-                .Replace("Commands/", "")
-                .Replace("Query", "")
-                .Replace("Command", "");
-        }
     }
 }

@@ -30,8 +30,8 @@ namespace Samples.WebApi
                 cfg.CommandGroupKeyResolver = customGroupKeyResolver;
                 cfg.QueryGroupKeyResolver = customGroupKeyResolver;
                 
-                cfg.EnableCommandHandling(container.GetKnownCommandTypes(), command => container.ResolveCommandHandlerAction(command));
-                cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.ResolveQueryHandlerFunction);
+                cfg.EnableCommandHandling(container.GetKnownCommandTypes(), container.ExecuteCommand);
+                cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.ExecuteQuery);
             });
 
             GlobalConfiguration.Configuration

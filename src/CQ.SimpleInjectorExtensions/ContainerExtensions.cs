@@ -7,6 +7,20 @@ namespace CQ
 {
     public static class ContainerExtensions
     {
+        public static void ExecuteCommand(this Container container, object command)
+        {
+            var handlerFunction = container.ResolveCommandHandlerAction(command);
+
+            handlerFunction(command);
+        }
+
+        public static object ExecuteQuery(this Container container, object query)
+        {
+            var handlerFunction = container.ResolveQueryHandlerFunction(query);
+
+            return handlerFunction(query);
+        }
+
         /// <summary>
         ///     Returns an Action which invokes <see cref="IHandleCommand{TCommand}.Handle" />
         ///     of the commandhandler registered for handling the given <paramref name="command" />

@@ -11,7 +11,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
         [ThreadStatic] private static IDisposable _app;
         [ThreadStatic] private static HttpApiClient _httpApiClient;
 
-        private readonly string RootUrl = "http://localhost:12345";
+        private string RootUrl => "http://localhost:" + (12345 + System.Threading.Thread.CurrentThread.ManagedThreadId);
 
         [SetUp]
         public virtual void SetUp()

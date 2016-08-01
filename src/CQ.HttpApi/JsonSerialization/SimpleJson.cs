@@ -58,6 +58,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -1418,6 +1419,11 @@ namespace SimpleJson
                     if (type == typeof (string))
                         return str;
 
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>))
+                    {
+                        return Convert.ChangeType(str, type.GetGenericArguments().Single(), CultureInfo.InvariantCulture);
+                    }
+                    
                     return Convert.ChangeType(str, type, CultureInfo.InvariantCulture);
                 }
                 if (type == typeof (Guid))

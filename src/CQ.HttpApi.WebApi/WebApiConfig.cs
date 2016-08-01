@@ -73,7 +73,7 @@ namespace CQ.HttpApi.WebApi
                 routeTemplate,
                 new {},
                 new {},
-                new QueryHttpMessageHandler(queryType, handleQuery));
+                new QueryHttpMessageHandler(queryType, handleQuery, JsonSerializer));
         }
 
         protected virtual void RegisterCommandHandlerApiDescription(Type commandType, IHttpRoute route)
@@ -114,8 +114,6 @@ namespace CQ.HttpApi.WebApi
                 RelativePath = route.RouteTemplate,
                 ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType, groupKey)
             };
-
-            
 
             var paramInfo = GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
                 .MakeGenericMethod(queryType)

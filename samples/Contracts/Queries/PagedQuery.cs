@@ -4,11 +4,11 @@ using CQ;
 
 namespace Contracts.Queries
 {
+    [DataContract]
     public class PagedQuery<T> : IQuery<Page<T>>
     {
         [DataMember(Name = "$skip")]
         public int? Skip { get; set; }
-
         [DataMember(Name = "$take")]
         public int? Take { get; set; }
     }

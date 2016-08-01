@@ -48,6 +48,7 @@
     <Compile Include="Grouping\SimpleCommandGroupKeyResolver.cs" />
     <Compile Include="Grouping\SimpleQueryGroupKeyResolver.cs" />
     <Compile Include="HttpApiException.cs" />
+    <Compile Include="JsonSerialization\JsonSerializerExtensions.cs" />
     <Compile Include="ObjectHelper.cs" />
     <Compile Include="RouteResolving\RouteResolverExtensions.cs" />
     <Compile Include="HttpApiConfig.cs" />

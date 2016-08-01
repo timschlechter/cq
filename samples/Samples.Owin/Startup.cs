@@ -20,8 +20,8 @@ namespace Sample.Owin.SelfHost
 
             app.UseCQ(cfg =>
             {
-                cfg.EnableCommandHandling(container.GetKnownCommandTypes(), command => container.ResolveCommandHandlerAction(command));
-                cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.ResolveQueryHandlerFunction);
+                cfg.EnableCommandHandling(container.GetKnownCommandTypes(), container.ExecuteCommand);
+                cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.ExecuteQuery);
             });
         }
 
