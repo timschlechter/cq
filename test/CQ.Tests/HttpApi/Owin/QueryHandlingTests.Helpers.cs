@@ -8,7 +8,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
 {
     public partial class QueryHandlingTests
     {
-        public IDictionary<TestQuery, object> HandledQueries { get; set; }
+        private IDictionary<TestQuery, object> _handledQueries;
 
         public class TestQuery
         {
@@ -26,9 +26,9 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
         {
         }
 
-        protected override void Configure(CQAppBuilderDecorator app)
+        protected override void Configure(OwinConfig cfg)
         {
-            HandledQueries = new Dictionary<TestQuery, object>();
+            _handledQueries = new Dictionary<TestQuery, object>();
 
             var queryTypes = new[]
             {
@@ -39,23 +39,23 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
             Func<object, object> queryHandler = query =>
             {
                 var testQuery = (TestQuery) query;
-                HandledQueries.Add(testQuery, testQuery.FixedResult);
+                _handledQueries.Add(testQuery, testQuery.FixedResult);
                 return testQuery.FixedResult;
             };
 
-            app.EnableQueryHandling(queryTypes, queryHandler);
+            cfg.EnableQueryHandling(queryTypes, queryHandler);
         }
 
         protected void QueryShouldBeHandled(TestQuery query)
         {
-            var handled = HandledQueries.FirstOrDefault(q => q.Key.Id == query.Id);
+            var handled = _handledQueries.FirstOrDefault(q => q.Key.Id == query.Id);
             Assert.IsNotNull(handled, "QueryShouldBeHandled");
             Assert.AreEqual(handled.Key.FixedResult, handled.Value, "QueryShouldBeHandled: Result");
         }
 
         protected void NumberOfHandledQueriesShouldBe(int expectedCount)
         {
-            Assert.AreEqual(expectedCount, HandledQueries.Count, "NumberOfHandledQueriesShouldBe");
+            Assert.AreEqual(expectedCount, _handledQueries.Count, "NumberOfHandledQueriesShouldBe");
         }
     }
 }

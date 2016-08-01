@@ -17,7 +17,12 @@ namespace CQ
 
         public static Type GetResultType(this Type queryType)
         {
-            return queryType.GetGenericArguments().Skip(1).FirstOrDefault();
+            if (!queryType.IsInterface)
+            {
+                queryType = queryType.GetInterfaces().First();
+            }
+
+            return queryType.GetGenericArguments().FirstOrDefault();
         }
     }
 }

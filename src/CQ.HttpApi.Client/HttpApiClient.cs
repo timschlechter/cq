@@ -11,21 +11,21 @@ namespace CQ.Client
 {
     public class HttpApiClient
     {
+        private readonly HttpApiConfig _config;
         private readonly string _rootUrl;
-        private readonly HttpApiSettings _settings;
 
-        public HttpApiClient(string rootUrl, HttpApiSettings settings = null)
+        public HttpApiClient(string rootUrl, HttpApiConfig config = null)
         {
             _rootUrl = rootUrl;
-            _settings = settings ?? HttpApiSettings.Default;
-            _settings.CommandRouteResolver = _settings.CommandRouteResolver ?? HttpApiSettings.Default.CommandRouteResolver;
-            _settings.QueryRouteResolver = _settings.QueryRouteResolver ?? HttpApiSettings.Default.QueryRouteResolver;
-            _settings.JsonSerializer = _settings.JsonSerializer ?? new SimpleJsonSerializer();
+            _config = config ?? HttpApiConfig.Default;
+            _config.CommandRouteResolver = _config.CommandRouteResolver ?? HttpApiConfig.Default.CommandRouteResolver;
+            _config.QueryRouteResolver = _config.QueryRouteResolver ?? HttpApiConfig.Default.QueryRouteResolver;
+            _config.JsonSerializer = _config.JsonSerializer ?? new SimpleJsonSerializer();
         }
 
         public Task ExecuteCommand<TCommand>(TCommand command)
         {
-            var path = _settings.CommandRouteResolver.ResolvePath(command);
+            var path = _config.CommandRouteResolver.ResolvePath(command);
             var req = new RestRequest(path)
             {
                 Method = Method.POST
@@ -39,7 +39,7 @@ namespace CQ.Client
 
         public Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
-            var path = _settings.QueryRouteResolver.ResolvePath(query);
+            var path = _config.QueryRouteResolver.ResolvePath(query);
             var req = new RestRequest(path)
             {
                 Method = Method.GET
@@ -94,7 +94,7 @@ namespace CQ.Client
                             writer.Flush();
                             stream.Position = 0;
 
-                            return (TResult) _settings.JsonSerializer.Deserialize(stream, typeof (TResult));
+                            return (TResult) _config.JsonSerializer.Deserialize(stream, typeof (TResult));
                         }
                     }
                 });

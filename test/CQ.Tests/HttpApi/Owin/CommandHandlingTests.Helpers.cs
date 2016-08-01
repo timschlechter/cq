@@ -8,7 +8,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
 {
     public partial class CommandHandlingTests
     {
-        public IList<TestCommand> HandledCommands { get; set; }
+        private IList<TestCommand> _handledCommands;
 
         public class TestCommand
         {
@@ -20,28 +20,30 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
             public Guid Id { get; set; }
         }
 
-        protected override void Configure(CQAppBuilderDecorator app)
+        protected override void Configure(OwinConfig cfg)
         {
-            HandledCommands = new List<TestCommand>();
-
-            var knownCommandTypes = new[]
+            var commandTypes = new[]
             {
                 typeof (TestCommand)
             };
+            
+            _handledCommands = new List<TestCommand>();
+            Action<object> commandHandler = command =>
+            {
+                _handledCommands.Add(command as TestCommand);
+            };
 
-            Action<object> commandHandler = command => { HandledCommands.Add(command as TestCommand); };
-
-            app.EnableCommandHandling(knownCommandTypes, commandHandler);
+            cfg.EnableCommandHandling(commandTypes, commandHandler);
         }
 
         protected void CommandShouldBeHandled(TestCommand command)
         {
-            Assert.IsNotNull(HandledCommands.FirstOrDefault(c => c.Id == command.Id), "CommandShouldBeHandled");
+            Assert.IsNotNull(_handledCommands.FirstOrDefault(c => c.Id == command.Id), "CommandShouldBeHandled");
         }
 
         protected void NumberOfHandledCommandsShouldBe(int expectedCount)
         {
-            Assert.AreEqual(expectedCount, HandledCommands.Count, "NumberOfHandledCommandsShouldBe");
+            Assert.AreEqual(expectedCount, _handledCommands.Count, "NumberOfHandledCommandsShouldBe");
         }
     }
 }

@@ -3,14 +3,16 @@ using CQ.HttpApi.RouteResolving;
 
 namespace CQ.HttpApi
 {
-    public class HttpApiSettings
+    public class HttpApiConfig
     {
-        public static readonly HttpApiSettings Default = new HttpApiSettings
+        public static readonly HttpApiConfig Default = new HttpApiConfig();
+
+        public HttpApiConfig()
         {
-            CommandRouteResolver = new SimpleCommandRouteResolver(),
-            QueryRouteResolver = new SimpleQueryRouteResolver(),
-            JsonSerializer = new SimpleJsonSerializer()
-        };
+            CommandRouteResolver = new SimpleCommandRouteResolver();
+            QueryRouteResolver = new SimpleQueryRouteResolver();
+            JsonSerializer = new SimpleJsonSerializer();
+        }
 
         public IJsonSerializer JsonSerializer { get; set; }
 

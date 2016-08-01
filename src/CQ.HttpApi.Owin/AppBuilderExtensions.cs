@@ -1,12 +1,15 @@
-﻿using Owin;
+﻿using System;
+using Owin;
 
 namespace CQ.HttpApi.Owin
 {
     public static class AppBuilderExtensions
     {
-        public static CQAppBuilderDecorator UseCQ(this IAppBuilder app, HttpApiSettings settings = null)
+        public static IAppBuilder UseCQ(this IAppBuilder app, Action<OwinConfig> config)
         {
-            return new CQAppBuilderDecorator(app, settings);
+            config(new OwinConfig(app));
+
+            return app;
         }
     }
 }

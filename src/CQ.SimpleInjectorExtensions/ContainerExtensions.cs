@@ -13,6 +13,11 @@ namespace CQ
         /// </summary>
         public static Action<object> ResolveCommandHandlerAction(this Container container, object command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             var commandType = command.GetType();
             var commandHandlerType = typeof (IHandleCommand<>).MakeGenericType(commandType);
             var commandHandler = container.GetInstance(commandHandlerType);
@@ -21,11 +26,16 @@ namespace CQ
         }
 
         /// <summary>
-        ///     Returns an Func which invokes <see cref="IHandleQuery{TQuery, TResult}.Handle" />
+        ///     Returns a Func which invokes <see cref="IHandleQuery{TQuery, TResult}.Handle" />
         ///     of the queryhandler registered for handling the given <paramref name="query" />
         /// </summary>
         public static Func<object, object> ResolveQueryHandlerFunction(this Container container, object query)
         {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+
             var queryType = query.GetType();
             var resultType = query.GetType().GetResultType();
             var queryHandlerType = typeof (IHandleQuery<,>).MakeGenericType(queryType, resultType);

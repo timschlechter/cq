@@ -17,12 +17,12 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
         [SetUp]
         public virtual void SetUp()
         {
-            _app = WebApp.Start(RootUrl, app => Configure(app.UseCQ()));
+            _app = WebApp.Start(RootUrl, app => app.UseCQ(Configure));
 
             _httpApiClient = new HttpApiClient(RootUrl);
         }
 
-        protected abstract void Configure(CQAppBuilderDecorator app);
+        protected abstract void Configure(OwinConfig cfg);
 
 
         [TearDown]
