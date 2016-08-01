@@ -12,10 +12,10 @@ namespace CQ.HttpApi.WebApi.ActionDescriptors
     {
         private readonly Type _queryType;
 
-        public QueryActionDescriptor(HttpConfiguration httpConfiguration, Type queryType)
+        public QueryActionDescriptor(HttpConfiguration httpConfiguration, Type queryType, string groupKey)
         {
             _queryType = queryType;
-            ControllerDescriptor = new HttpControllerDescriptor(httpConfiguration, "Queries", typeof (object));
+            ControllerDescriptor = new HttpControllerDescriptor(httpConfiguration, groupKey, typeof (object));
         }
 
         public override string ActionName => _queryType.Name;

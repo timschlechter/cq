@@ -51,9 +51,9 @@ namespace CQ.HttpApi.Owin
                 {
                     var parameters = context.Request.Query
                         .ToDictionary(
-                            kvp => kvp.Key,
-                            kvp => kvp.Value.FirstOrDefault());
-                    dynamic eo = ToExpandObject(parameters);
+                            kvp => kvp.Key.EndsWith("[]") ? kvp.Key.Substring(0, kvp.Key.Length - 2) : kvp.Key,
+                            kvp => kvp.Key.EndsWith("[]") ? (object)kvp.Value : kvp.Value.FirstOrDefault());
+                    dynamic eo = ObjectHelper.Expand(parameters);
 
                     using (var stream = new MemoryStream())
                     {
@@ -72,16 +72,6 @@ namespace CQ.HttpApi.Owin
                 await next();
             });
             return this;
-        }
-
-        public static dynamic ToExpandObject(IDictionary<string, string> valueCollection)
-        {
-            var result = new ExpandoObject() as IDictionary<string, object>;
-            foreach (var kvp in valueCollection)
-            {
-                result.Add(kvp.Key, kvp.Value);
-            }
-            return result;
         }
 
         private Type GetCommandType(IOwinContext context)

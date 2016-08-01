@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Web.Http.Routing;
+using CQ.HttpApi.Grouping;
 using CQ.HttpApi.WebApi.ActionDescriptors;
 using CQ.HttpApi.WebApi.HttpMessageHandlers;
 
@@ -48,13 +49,7 @@ namespace CQ.HttpApi.WebApi
 
             return this;
         }
-
-
-        private static string ToValidRouteTemplate(string routePath)
-        {
-            return routePath != null && routePath.StartsWith("/") ? routePath.Substring(1) : routePath;
-        }
-
+        
         protected virtual IHttpRoute RegisterCommandHandlerRoute(Type commandType, Action<object> handleCommand)
         {
             var routePath = CommandRouteResolver.ResolveRoutePath(commandType);
@@ -84,13 +79,14 @@ namespace CQ.HttpApi.WebApi
         protected virtual void RegisterCommandHandlerApiDescription(Type commandType, IHttpRoute route)
         {
             var apiExplorer = _httpConfiguration.Services.GetApiExplorer();
+            var groupKey = CommandGroupKeyResolver.ResolveGroupKey(commandType);
 
             var apiDescription = new ApiDescription
             {
                 Route = route,
                 HttpMethod = HttpMethod.Post,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType)
+                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType, groupKey)
             };
 
             var paramInfo = GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -106,16 +102,17 @@ namespace CQ.HttpApi.WebApi
             apiExplorer.ApiDescriptions.Add(apiDescription);
         }
 
-        private void RegisterQueryHandlerApiDescription(Type queryType, IHttpRoute route)
+        protected virtual void RegisterQueryHandlerApiDescription(Type queryType, IHttpRoute route)
         {
             var apiExplorer = _httpConfiguration.Services.GetApiExplorer();
+            var groupKey = QueryGroupKeyResolver.ResolveGroupKey(queryType);
 
             var apiDescription = new ApiDescription
             {
                 Route = route,
                 HttpMethod = HttpMethod.Get,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType)
+                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType, groupKey)
             };
 
             
@@ -131,6 +128,11 @@ namespace CQ.HttpApi.WebApi
             });
 
             apiExplorer.ApiDescriptions.Add(apiDescription);
+        }
+
+        private static string ToValidRouteTemplate(string routePath)
+        {
+            return routePath != null && routePath.StartsWith("/") ? routePath.Substring(1) : routePath;
         }
 
         private void ParamInfoDummy<T>(T command)

@@ -45,13 +45,14 @@ namespace CQ.Client
                 Method = Method.GET
             };
 
-            var parameters = ToDictionary(query)
-                .Select(kvp => new Parameter
-                {
-                    Name = kvp.Key,
-                    Value = kvp.Value,
-                    Type = ParameterType.QueryString
-                }).ToList();
+            var parameters = ObjectHelper.Flatten(query)
+                .SelectMany(group => 
+                    group.Select(value => new Parameter
+                    {
+                        Name = group.Key,
+                        Value = value,
+                        Type = ParameterType.QueryString
+                    }));
 
             req.Parameters.AddRange(parameters);
 

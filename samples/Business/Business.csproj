@@ -46,6 +46,8 @@
     <Compile Include="CommandHandlers\ShipOrderCommandHandler.cs" />
     <Compile Include="CommandHandlers\CreateOrderCommandHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryHandlers\GetCustomersQueryHandler.cs" />
+    <Compile Include="QueryHandlers\GetOrdersQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetOrderByIdQueryHandler.cs" />
   </ItemGroup>
   <ItemGroup>

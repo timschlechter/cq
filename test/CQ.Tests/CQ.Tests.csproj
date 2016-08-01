@@ -67,8 +67,8 @@
     <Compile Include="..\..\etc\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
-    <Compile Include="HttpApi\Owin\CommandHandlingTests.Helpers.cs" />
-    <Compile Include="HttpApi\Owin\QueryHandlingTests.Helpers.cs" />
+    <Compile Include="HttpApi\JsonSerialization\SimpleJsonSerializerTests.cs" />
+    <Compile Include="HttpApi\ObjectHelperTests.cs" />
     <Compile Include="HttpApi\Owin\QueryHandlingTests.cs" />
     <Compile Include="HttpApi\Owin\OwinBaseTests.cs" />
     <Compile Include="HttpApi\Owin\CommandHandlingTests.cs" />

@@ -45,7 +45,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
         protected TResult ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
             var task = _httpApiClient.ExecuteQuery<TQuery, TResult>(query);
-
+                
             task.Wait(250);
 
             return task.Result;

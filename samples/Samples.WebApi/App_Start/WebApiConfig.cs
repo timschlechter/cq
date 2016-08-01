@@ -4,6 +4,7 @@ using CQ;
 using CQ.HttpApi.WebApi;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
+using Samples.WebApi.Code;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using Swashbuckle.Application;
@@ -20,7 +21,15 @@ namespace Samples.WebApi
             var container = ConfigureContainer();
 
             config.UseCQ(cfg =>
-            {   
+            {
+                var customRouteResolver = new CustomRouteResolver();
+                cfg.CommandRouteResolver = customRouteResolver;
+                cfg.QueryRouteResolver = customRouteResolver;
+
+                var customGroupKeyResolver = new CustomGroupKeyResolver();
+                cfg.CommandGroupKeyResolver = customGroupKeyResolver;
+                cfg.QueryGroupKeyResolver = customGroupKeyResolver;
+                
                 cfg.EnableCommandHandling(container.GetKnownCommandTypes(), command => container.ResolveCommandHandlerAction(command));
                 cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.ResolveQueryHandlerFunction);
             });
