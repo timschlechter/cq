@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CQ
 {
@@ -17,6 +14,7 @@ namespace CQ
         {
             return queryHandlerType.GetGenericArguments().FirstOrDefault();
         }
+
         public static Type GetResultType(this Type queryType)
         {
             return queryType.GetGenericArguments().Skip(1).FirstOrDefault();

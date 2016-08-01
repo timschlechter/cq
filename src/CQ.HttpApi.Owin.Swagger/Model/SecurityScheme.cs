@@ -6,21 +6,20 @@ namespace CQ.HttpApi.Owin.Swagger.Model
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class SecurityScheme
     {
-        public string type;
+        public string authorizationUrl;
 
         public string description;
 
-        public string name;
+        public string flow;
 
         public string @in;
 
-        public string flow;
-
-        public string authorizationUrl;
-
-        public string tokenUrl;
+        public string name;
 
         public IDictionary<string, string> scopes;
+
+        public string tokenUrl;
+        public string type;
 
         public Dictionary<string, object> vendorExtensions = new Dictionary<string, object>();
     }

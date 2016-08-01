@@ -7,67 +7,66 @@ namespace CQ.HttpApi.Owin.Swagger.Model
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Schema
     {
-        [DataMember(Name = "$ref")]
-        public string @ref;
-
-        public string format;
-
-        public string title;
-
-        public string description;
-
-        public object @default;
-
-        public int? multipleOf;
-
-        public int? maximum;
-
-        public bool? exclusiveMaximum;
-
-        public int? minimum;
-
-        public bool? exclusiveMinimum;
-
-        public int? maxLength;
-
-        public int? minLength;
-
-        public string pattern;
-
-        public int? maxItems;
-
-        public int? minItems;
-
-        public bool? uniqueItems;
-
-        public int? maxProperties;
-
-        public int? minProperties;
-
-        public IList<string> required;
-
-        public IList<object> @enum;
-
-        public string type;
-
-        public Schema items;
+        public Schema additionalProperties;
 
         public IList<Schema> allOf;
 
-        public IDictionary<string, Schema> properties;
+        public object @default;
 
-        public Schema additionalProperties;
+        public string description;
 
         public string discriminator;
 
-        public bool? readOnly;
-
-        public Xml xml;
-
-        public ExternalDocs externalDocs;
+        public IList<object> @enum;
 
         public object example;
 
+        public bool? exclusiveMaximum;
+
+        public bool? exclusiveMinimum;
+
+        public ExternalDocs externalDocs;
+
+        public string format;
+
+        public Schema items;
+
+        public int? maximum;
+
+        public int? maxItems;
+
+        public int? maxLength;
+
+        public int? maxProperties;
+
+        public int? minimum;
+
+        public int? minItems;
+
+        public int? minLength;
+
+        public int? minProperties;
+
+        public int? multipleOf;
+
+        public string pattern;
+
+        public IDictionary<string, Schema> properties;
+
+        public bool? readOnly;
+
+        [DataMember(Name = "$ref")] public string @ref;
+
+        public IList<string> required;
+
+        public string title;
+
+        public string type;
+
+        public bool? uniqueItems;
+
         public Dictionary<string, object> vendorExtensions = new Dictionary<string, object>();
+
+        public Xml xml;
     }
 }

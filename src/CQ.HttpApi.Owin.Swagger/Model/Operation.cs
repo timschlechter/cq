@@ -6,9 +6,9 @@ namespace CQ.HttpApi.Owin.Swagger.Model
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Operation
     {
-        public IList<string> tags;
+        public IList<string> consumes;
 
-        public string summary;
+        public bool deprecated;
 
         public string description;
 
@@ -16,19 +16,18 @@ namespace CQ.HttpApi.Owin.Swagger.Model
 
         public string operationId;
 
-        public IList<string> consumes;
+        public IList<Parameter> parameters;
 
         public IList<string> produces;
-
-        public IList<Parameter> parameters;
 
         public IDictionary<string, Response> responses;
 
         public IList<string> schemes;
 
-        public bool deprecated;
-
         public IList<IDictionary<string, IEnumerable<string>>> security;
+
+        public string summary;
+        public IList<string> tags;
 
         public Dictionary<string, object> vendorExtensions = new Dictionary<string, object>();
     }

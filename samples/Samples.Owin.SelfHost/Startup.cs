@@ -1,6 +1,6 @@
 using System.Reflection;
 using CQ;
-using CQ.HttpApi.Owin.SimpleInjector;
+using CQ.HttpApi.Owin;
 using CQ.HttpApi.Owin.Swagger;
 using Owin;
 using Samples.Business.CommandHandlers;
@@ -13,13 +13,15 @@ namespace Sample.Owin.SelfHost
     internal class Startup
     {
         private static readonly Assembly[] CommandAssemblies = {typeof (CreateOrderCommandHandler).Assembly};
-        private static readonly Assembly[] QueryAssemblies = { typeof(GetOrderByIdQueryHandler).Assembly };
+        private static readonly Assembly[] QueryAssemblies = {typeof (GetOrderByIdQueryHandler).Assembly};
 
         public void Configuration(IAppBuilder app)
         {
             var container = ConfigureContainer(app);
 
-            app.UseCQ(container)
+            app.UseCQ()
+                .EnableCommandHandling(container.GetKnownCommandTypes(), command => container.ResolveCommandHandlerAction(command))
+                .EnableQueryHandling(container.GetKnownQueryTypes(), container.ResolveQueryHandlerFunction)
                 .EnableSwagger("/swagger");
         }
 

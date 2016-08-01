@@ -10,6 +10,7 @@ namespace CQ.HttpApi.RouteResolving
         {
             return routeResolver.ResolveRoutePath(command?.GetType());
         }
+
         public static Type FindTypeByPath(this IEnumerable<Type> types, string path, IRouteResolver routeResolver)
         {
             if (types == null || routeResolver == null)
@@ -24,6 +25,5 @@ namespace CQ.HttpApi.RouteResolving
         {
             return string.Equals(first, second, StringComparison.CurrentCultureIgnoreCase);
         }
-
     }
 }

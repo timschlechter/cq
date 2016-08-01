@@ -8,11 +8,11 @@ namespace CQ.HttpApi.Owin.Swagger.Model
     {
         public string description;
 
-        public Schema schema;
+        public object examples;
 
         public IDictionary<string, Header> headers;
 
-        public object examples;
+        public Schema schema;
 
         public Dictionary<string, object> vendorExtensions = new Dictionary<string, object>();
     }

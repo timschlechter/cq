@@ -6,14 +6,13 @@ namespace CQ.HttpApi.Owin.Swagger.Model
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class Parameter : PartialSchema
     {
-        [DataMember(Name = "$ref")]
-        public string @ref;
-
-        public string name;
+        public string description;
 
         public string @in;
 
-        public string description;
+        public string name;
+
+        [DataMember(Name = "$ref")] public string @ref;
 
         public bool? required;
 

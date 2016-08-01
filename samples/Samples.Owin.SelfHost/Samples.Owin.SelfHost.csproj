@@ -83,10 +83,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CQ.HttpApi.Owin.SimpleInjector\CQ.HttpApi.Owin.SimpleInjector.csproj">
-      <Project>{51ae49f2-58c0-48e2-9d0f-fa921adf963b}</Project>
-      <Name>CQ.HttpApi.Owin.SimpleInjector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\CQ.HttpApi.Owin.Swagger\CQ.HttpApi.Owin.Swagger.csproj">
       <Project>{9E175235-B19F-47CD-B607-395AD980C2D0}</Project>
       <Name>CQ.HttpApi.Owin.Swagger</Name>
@@ -98,6 +94,10 @@
     <ProjectReference Include="..\..\src\CQ.HttpApi.Owin\CQ.HttpApi.Owin.csproj">
       <Project>{B3188278-2B2E-4F03-B8F1-87D588EBF2C4}</Project>
       <Name>CQ.HttpApi.Owin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\CQ.SimpleInjectorExtensions\CQ.SimpleInjectorExtensions.csproj">
+      <Project>{64D7D5EB-8BCB-49B7-9D72-C91AF0AC0FFE}</Project>
+      <Name>CQ.SimpleInjectorExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\CQ\CQ.csproj">
       <Project>{AC3BA93B-141D-4195-B4E2-A7253CC4629C}</Project>
