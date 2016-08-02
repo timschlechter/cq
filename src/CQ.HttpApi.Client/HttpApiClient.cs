@@ -5,7 +5,6 @@ using CQ.HttpApi;
 using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 using RestSharp;
-using RestSharp.Serializers;
 
 namespace CQ.Client
 {
@@ -33,7 +32,7 @@ namespace CQ.Client
             {
                 RequestFormat = DataFormat.Json
             };
-            
+
             req.AddParameter(new Parameter
             {
                 Name = "application/json",
@@ -77,7 +76,9 @@ namespace CQ.Client
                     throw new HttpApiException(response.StatusDescription) {StatusCode = response.StatusCode};
                 }
 
-                return _config.JsonSerializer.Deserialize<TResult>(response.Content);
+                return string.IsNullOrEmpty(response.Content)
+                    ? default(TResult)
+                    : _config.JsonSerializer.Deserialize<TResult>(response.Content);
             });
         }
     }

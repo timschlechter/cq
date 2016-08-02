@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace CQ.HttpApi.Tests.HttpApi
@@ -51,7 +48,7 @@ namespace CQ.HttpApi.Tests.HttpApi
         {
             var flattened = ObjectHelper.Flatten(new
             {
-                Items = new [] { 0,1,2}
+                Items = new[] {0, 1, 2}
             });
 
             var items = flattened["Items[]"].ToArray();

@@ -3,25 +3,30 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using CQ.HttpApi.JsonSerialization;
 
 namespace CQ.HttpApi.WebApi.HttpMessageHandlers
 {
     public class CommandHttpMessageHandler : DelegatingHandler
     {
-        private Type _commandType;
         private readonly Action<object> _handleCommand;
+        private readonly IJsonSerializer _serializer;
+        private readonly Type _commandType;
 
-        public CommandHttpMessageHandler(Type commandType, Action<object> handleCommand)
+        public CommandHttpMessageHandler(Type commandType, Action<object> handleCommand, IJsonSerializer serializer)
         {
             _commandType = commandType;
             _handleCommand = handleCommand;
+            _serializer = serializer;
         }
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            _handleCommand(null);
+            var stream = await request.Content.ReadAsStreamAsync();
+            var command = _serializer.Deserialize(stream, _commandType);
+            _handleCommand(command);
 
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace CQ.HttpApi.WebApi
                 routeTemplate,
                 new {},
                 new {},
-                new CommandHttpMessageHandler(commandType, handleCommand));
+                new CommandHttpMessageHandler(commandType, handleCommand, JsonSerializer));
         }
 
         protected virtual IHttpRoute RegisterQueryHandlerRoute(Type queryType, Func<object, object> handleQuery)
