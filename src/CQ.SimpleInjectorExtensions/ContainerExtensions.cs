@@ -7,14 +7,14 @@ namespace CQ
 {
     public static class ContainerExtensions
     {
-        public static void ExecuteCommand(this Container container, object command)
+        public static void DelegateCommandToHandler(this Container container, object command)
         {
             var handlerFunction = container.ResolveCommandHandlerAction(command);
 
             handlerFunction(command);
         }
 
-        public static object ExecuteQuery(this Container container, object query)
+        public static object DelegateQueryToHandler(this Container container, object query)
         {
             var handlerFunction = container.ResolveQueryHandlerFunction(query);
 

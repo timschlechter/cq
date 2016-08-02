@@ -9,7 +9,7 @@ namespace Business.QueryHandlers
 {
     public class GetCustomersQueryHandler : IHandleQuery<GetCustomersQuery, Page<Customer>>
     {
-        private readonly List<Customer> _customers = new List<Customer>
+        private static readonly List<Customer> _customers = new List<Customer>
         {
             new Customer {Id = Guid.NewGuid(), Name = "Alice", BirthDate = new DateTime(1980, 11, 23)},
             new Customer {Id = Guid.NewGuid(), Name = "Bob", BirthDate = new DateTime(1955, 3, 31)},
