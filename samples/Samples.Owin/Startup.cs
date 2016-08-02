@@ -1,4 +1,5 @@
 using System.Reflection;
+using Business;
 using CQ;
 using CQ.HttpApi.Owin;
 using Owin;
@@ -11,7 +12,7 @@ namespace Sample.Owin.SelfHost
 {
     internal class Startup
     {
-        private static readonly Assembly[] CommandAssemblies = {typeof (CreateOrderCommandHandler).Assembly};
+        private static readonly Assembly[] CommandAssemblies = {typeof (PlaceOrderCommandHandler).Assembly};
         private static readonly Assembly[] QueryAssemblies = {typeof (GetOrderByIdQueryHandler).Assembly};
 
         public void Configuration(IAppBuilder app)
@@ -30,8 +31,11 @@ namespace Sample.Owin.SelfHost
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new ExecutionContextScopeLifestyle();
 
-            container.Register(typeof (IHandleCommand<>), CommandAssemblies);
-            container.Register(typeof (IHandleQuery<,>), QueryAssemblies);
+            container.Register(typeof (ICommandHandler<>), CommandAssemblies);
+            container.Register(typeof (IQueryHandler<,>), QueryAssemblies);
+            container.Register<IQueryProcessor, ContainerQueryProcessor>();
+
+            container.RegisterSingleton<SamplesStorage>();
 
             container.Verify();
 

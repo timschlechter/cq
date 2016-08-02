@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Reflection;
 using System.Web.Http;
+using Business;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
 using CQ;
 using CQ.HttpApi.WebApi;
 using Samples.WebApi.Code;
-using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using Swashbuckle.Application;
+using Container = SimpleInjector.Container;
 
 namespace Samples.WebApi
 {
     public class WebApiConfig
     {
-        private static readonly Assembly[] CommandAssemblies = {typeof (CreateOrderCommandHandler).Assembly};
+        private static readonly Assembly[] CommandAssemblies = {typeof (PlaceOrderCommandHandler).Assembly};
         private static readonly Assembly[] QueryAssemblies = {typeof (GetOrderByIdQueryHandler).Assembly};
 
         public static void Configure(HttpConfiguration config)
@@ -40,6 +41,9 @@ namespace Samples.WebApi
                         var result = apiDescription.RelativePath.Replace("Api/", "");
                         return result.Substring(0, result.IndexOf("/", StringComparison.InvariantCulture));
                     });
+
+                    cfg.SchemaFilter<CustomSchemaFilter>();
+                    cfg.OperationFilter<CustomOperationFilter>();
                 })
                 .EnableSwaggerUi();
         }
@@ -49,9 +53,12 @@ namespace Samples.WebApi
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
 
-            container.Register(typeof (IHandleCommand<>), CommandAssemblies);
-            container.Register(typeof (IHandleQuery<,>), QueryAssemblies);
+            container.Register(typeof (ICommandHandler<>), CommandAssemblies);
+            container.Register(typeof (IQueryHandler<,>), QueryAssemblies);
+            container.Register<IQueryProcessor, ContainerQueryProcessor>();
 
+            container.RegisterSingleton<SamplesStorage>();
+            
             container.Verify();
 
             return container;

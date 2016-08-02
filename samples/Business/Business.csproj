@@ -43,15 +43,21 @@
     <Compile Include="..\..\etc\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
+    <Compile Include="BusinessException.cs" />
     <Compile Include="CommandHandlers\ShipOrderCommandHandler.cs" />
-    <Compile Include="CommandHandlers\CreateOrderCommandHandler.cs" />
+    <Compile Include="CommandHandlers\PlaceOrderCommandHandler.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHandlers\GetCustomersQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetOrdersQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetOrderByIdQueryHandler.cs" />
+    <Compile Include="SamplesStorage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\CQ.SimpleInjectorExtensions\CQ.SimpleInjectorExtensions.csproj">
+      <Project>{64d7d5eb-8bcb-49b7-9d72-c91af0ac0ffe}</Project>
+      <Name>CQ.SimpleInjectorExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contracts\Contracts.csproj">
       <Project>{D5195068-EF87-447C-9B9D-199D3DEF0439}</Project>
       <Name>Contracts</Name>

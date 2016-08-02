@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -85,7 +86,8 @@ namespace CQ.HttpApi.WebApi
                 Route = route,
                 HttpMethod = HttpMethod.Post,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType)
+                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType),
+                Documentation = commandType.GetCustomAttribute<DescriptionAttribute>()?.Description
             };
 
             apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());
@@ -93,6 +95,7 @@ namespace CQ.HttpApi.WebApi
 
             apiDescription.ParameterDescriptions.Add(new ApiParameterDescription
             {
+                Name = "body",
                 Source = ApiParameterSource.FromBody,
                 ParameterDescriptor = new ReflectedHttpParameterDescriptor(
                     apiDescription.ActionDescriptor,
@@ -111,7 +114,8 @@ namespace CQ.HttpApi.WebApi
                 Route = route,
                 HttpMethod = HttpMethod.Get,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType)
+                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType),
+                Documentation = queryType.GetCustomAttribute<DescriptionAttribute>()?.Description
             };
 
             apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());

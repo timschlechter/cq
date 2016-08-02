@@ -1,6 +1,6 @@
 ﻿namespace CQ
 {
-    public interface IHandleCommand<TCommand>
+    public interface ICommandHandler<TCommand>
     {
         void Handle(TCommand command);
     }

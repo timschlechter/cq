@@ -1,14 +1,26 @@
-﻿using CQ;
+﻿using System.Linq;
+using CQ;
 using Contracts.Model;
 using Contracts.Queries.Orders;
 
 namespace Business.QueryHandlers
 {
-    public class GetOrdersQueryHandler : IHandleQuery<GetOrdersQuery, Page<Order>>
+    public class GetOrdersQueryHandler : IQueryHandler<GetOrdersQuery, Page<Order>>
     {
+        private readonly SamplesStorage _storage;
+
+        public GetOrdersQueryHandler(SamplesStorage storage)
+        {
+            _storage = storage;
+        }
+
         public Page<Order> Handle(GetOrdersQuery query)
         {
-            return null;
+            return new Page<Order>
+            {
+                Items = _storage.Orders.ApplyPaging(query).ToArray(),
+                TotalCount = _storage.Orders.Count
+            };
         }
     }
 }

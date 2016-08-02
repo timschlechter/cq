@@ -22,7 +22,7 @@ namespace CQ
         }
 
         /// <summary>
-        ///     Returns an Action which invokes <see cref="IHandleCommand{TCommand}.Handle" />
+        ///     Returns an Action which invokes <see cref="ICommandHandler{TCommand}.Handle" />
         ///     of the commandhandler registered for handling the given <paramref name="command" />
         /// </summary>
         public static Action<object> ResolveCommandHandlerAction(this Container container, object command)
@@ -33,14 +33,14 @@ namespace CQ
             }
 
             var commandType = command.GetType();
-            var commandHandlerType = typeof (IHandleCommand<>).MakeGenericType(commandType);
-            var commandHandler = container.GetInstance(commandHandlerType);
-            var handleMethodInfo = commandHandler.GetType().GetMethod("Handle");
-            return c => handleMethodInfo.Invoke(commandHandler, new[] {command});
+            var commandHandlerType = typeof (ICommandHandler<>).MakeGenericType(commandType);
+            dynamic commandHandler = container.GetInstance(commandHandlerType);
+
+            return c => commandHandler.Handle((dynamic) c);
         }
 
         /// <summary>
-        ///     Returns a Func which invokes <see cref="IHandleQuery{TQuery, TResult}.Handle" />
+        ///     Returns a Func which invokes <see cref="IQueryHandlerQueryHandler{TQuery,TResult}.Handle" />
         ///     of the queryhandler registered for handling the given <paramref name="query" />
         /// </summary>
         public static Func<object, object> ResolveQueryHandlerFunction(this Container container, object query)
@@ -52,10 +52,10 @@ namespace CQ
 
             var queryType = query.GetType();
             var resultType = query.GetType().GetResultType();
-            var queryHandlerType = typeof (IHandleQuery<,>).MakeGenericType(queryType, resultType);
-            var queryHandler = container.GetInstance(queryHandlerType);
-            var handleMethodInfo = queryHandler.GetType().GetMethod("Handle");
-            return q => handleMethodInfo.Invoke(queryHandler, new[] {q});
+            var queryHandlerType = typeof (IQueryHandler<,>).MakeGenericType(queryType, resultType);
+            dynamic queryHandler = container.GetInstance(queryHandlerType);
+
+            return q => queryHandler.Handle((dynamic)q);
         }
 
         public static IEnumerable<Type> GetKnownCommandTypes(this Container container)
@@ -73,13 +73,13 @@ namespace CQ
         public static IEnumerable<InstanceProducer> GetCommandHandlerRegistrations(this Container container)
         {
             return container.GetCurrentRegistrations()
-                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (IHandleCommand<>)));
+                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (ICommandHandler<>)));
         }
 
         public static IEnumerable<InstanceProducer> GetQueryHandlerRegistrations(this Container container)
         {
             return container.GetCurrentRegistrations()
-                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (IHandleQuery<,>)));
+                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (IQueryHandler<,>)));
         }
 
         private static bool ImplementsOpenGeneric(this Type type, Type openGenericType)

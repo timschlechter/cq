@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Contracts.Model;
 using Contracts.Queries.Customers;
 using CQ;
 
 namespace Business.QueryHandlers
 {
-    public class GetCustomersQueryHandler : IHandleQuery<GetCustomersQuery, Page<Customer>>
+    public class GetCustomersQueryHandler : IQueryHandler<GetCustomersQuery, Page<Customer>>
     {
-        private static readonly List<Customer> _customers = new List<Customer>
+        private readonly SamplesStorage _storage;
+
+        public GetCustomersQueryHandler(SamplesStorage storage)
         {
-            new Customer {Id = Guid.NewGuid(), Name = "Alice", BirthDate = new DateTime(1980, 11, 23)},
-            new Customer {Id = Guid.NewGuid(), Name = "Bob", BirthDate = new DateTime(1955, 3, 31)},
-            new Customer {Id = Guid.NewGuid(), Name = "Charlie", BirthDate = new DateTime(1992, 12, 2)}
-        };
+            _storage = storage;
+        }
 
         public Page<Customer> Handle(GetCustomersQuery query)
         {
-            return new Page<Customer>()
+            return new Page<Customer>
             {
-                Items = _customers.ApplyPaging(query).ToArray(),
-                TotalCount = _customers.Count
+                Items = _storage.Customers.ApplyPaging(query).ToArray(),
+                TotalCount = _storage.Customers.Count
             };
         }
     }
