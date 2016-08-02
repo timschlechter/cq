@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Web.Http.Routing;
-using CQ.HttpApi.Grouping;
 using CQ.HttpApi.WebApi.ActionDescriptors;
 using CQ.HttpApi.WebApi.HttpMessageHandlers;
 
@@ -49,7 +50,7 @@ namespace CQ.HttpApi.WebApi
 
             return this;
         }
-        
+
         protected virtual IHttpRoute RegisterCommandHandlerRoute(Type commandType, Action<object> handleCommand)
         {
             var routePath = CommandRouteResolver.ResolveRoutePath(commandType);
@@ -89,14 +90,15 @@ namespace CQ.HttpApi.WebApi
                 ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType, groupKey)
             };
 
-            var paramInfo = GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .MakeGenericMethod(commandType)
-                .GetParameters()[0];
+            apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());
+            apiDescription.SupportedResponseFormatters.Add(new JsonMediaTypeFormatter());
 
             apiDescription.ParameterDescriptions.Add(new ApiParameterDescription
             {
                 Source = ApiParameterSource.FromBody,
-                ParameterDescriptor = new ReflectedHttpParameterDescriptor(apiDescription.ActionDescriptor, paramInfo)
+                ParameterDescriptor = new ReflectedHttpParameterDescriptor(
+                    apiDescription.ActionDescriptor,
+                    CreateGenericParameterInfo(commandType))
             });
 
             apiExplorer.ApiDescriptions.Add(apiDescription);
@@ -115,14 +117,15 @@ namespace CQ.HttpApi.WebApi
                 ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType, groupKey)
             };
 
-            var paramInfo = GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
-                .MakeGenericMethod(queryType)
-                .GetParameters()[0];
+            apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());
+            apiDescription.SupportedResponseFormatters.Add(new JsonMediaTypeFormatter());
 
             apiDescription.ParameterDescriptions.Add(new ApiParameterDescription
             {
                 Source = ApiParameterSource.FromUri,
-                ParameterDescriptor = new ReflectedHttpParameterDescriptor(apiDescription.ActionDescriptor, paramInfo)
+                ParameterDescriptor = new ReflectedHttpParameterDescriptor(
+                    apiDescription.ActionDescriptor,
+                    CreateGenericParameterInfo(queryType))
             });
 
             apiExplorer.ApiDescriptions.Add(apiDescription);
@@ -131,6 +134,13 @@ namespace CQ.HttpApi.WebApi
         private static string ToValidRouteTemplate(string routePath)
         {
             return routePath != null && routePath.StartsWith("/") ? routePath.Substring(1) : routePath;
+        }
+        
+        private ParameterInfo CreateGenericParameterInfo(Type type)
+        {
+            return GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
+                .MakeGenericMethod(type)
+                .GetParameters()[0];
         }
 
         private void ParamInfoDummy<T>(T command)
