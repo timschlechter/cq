@@ -6,8 +6,6 @@ namespace CQ.HttpApi
 {
     public class HttpApiConfig
     {
-        public static readonly HttpApiConfig Default = new HttpApiConfig();
-
         public HttpApiConfig()
         {
             CommandRouteResolver = new SimpleCommandRouteResolver();

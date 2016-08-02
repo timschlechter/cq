@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CQ.HttpApi;
 using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 using RestSharp;
+using RestSharp.Serializers;
 
 namespace CQ.Client
 {
@@ -12,27 +14,34 @@ namespace CQ.Client
         private readonly HttpApiConfig _config;
         private readonly string _rootUrl;
 
-        public HttpApiClient(string rootUrl, HttpApiConfig config = null)
+        public HttpApiClient(string rootUrl, Action<HttpApiConfig> configure = null)
         {
             _rootUrl = rootUrl;
 
-            _config = config ?? HttpApiConfig.Default;
-            _config.JsonSerializer = _config.JsonSerializer ?? HttpApiConfig.Default.JsonSerializer;
-            _config.CommandRouteResolver = _config.CommandRouteResolver ?? HttpApiConfig.Default.CommandRouteResolver;
-            _config.QueryRouteResolver = _config.QueryRouteResolver ?? HttpApiConfig.Default.QueryRouteResolver;
-            _config.CommandGroupKeyResolver = _config.CommandGroupKeyResolver ?? HttpApiConfig.Default.CommandGroupKeyResolver;
-            _config.QueryGroupKeyResolver = _config.QueryGroupKeyResolver ?? HttpApiConfig.Default.QueryGroupKeyResolver;
+            _config = new HttpApiConfig();
+
+            if (configure != null)
+            {
+                configure(_config);
+            }
         }
 
         public Task ExecuteCommand<TCommand>(TCommand command)
         {
             var path = _config.CommandRouteResolver.ResolvePath(command);
-            var req = new RestRequest(path, Method.POST);
+            var req = new RestRequest(path, Method.POST)
+            {
+                RequestFormat = DataFormat.Json
+            };
+            
+            req.AddParameter(new Parameter
+            {
+                Name = "application/json",
+                Value = _config.JsonSerializer.Serialize(command),
+                Type = ParameterType.RequestBody
+            });
 
-            req.AddJsonBody(command);
-
-            return ExecuteRequest<object>(req)
-                .ContinueWith(task => { });
+            return ExecuteRequest<object>(req).ContinueWith(task => { });
         }
 
         public Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>

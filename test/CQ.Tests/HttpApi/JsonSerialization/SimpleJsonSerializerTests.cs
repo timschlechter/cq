@@ -24,7 +24,7 @@ namespace CQ.HttpApi.Tests.HttpApi.JsonSerialization
 
         public class Some
         {
-            public new List<int> Items { get; set; }
+            public List<int> Items { get; set; }
         }
     }
 }
