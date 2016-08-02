@@ -12,10 +12,10 @@ namespace CQ.HttpApi.WebApi.ActionDescriptors
     {
         private readonly Type _commandType;
 
-        public CommandActionDescriptor(HttpConfiguration httpConfiguration, Type commandType, string groupKey)
+        public CommandActionDescriptor(HttpConfiguration httpConfiguration, Type commandType)
         {
             _commandType = commandType;
-            ControllerDescriptor = new HttpControllerDescriptor(httpConfiguration, groupKey, typeof(object));
+            ControllerDescriptor = new HttpControllerDescriptor(httpConfiguration, "Commands", typeof(object));
         }
 
         public override string ActionName => _commandType.Name;

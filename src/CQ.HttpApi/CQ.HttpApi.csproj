@@ -44,9 +44,6 @@
     <Compile Include="..\..\etc\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
-    <Compile Include="Grouping\IGroupKeyResolver.cs" />
-    <Compile Include="Grouping\SimpleCommandGroupKeyResolver.cs" />
-    <Compile Include="Grouping\SimpleQueryGroupKeyResolver.cs" />
     <Compile Include="HttpApiException.cs" />
     <Compile Include="JsonSerialization\JsonSerializerExtensions.cs" />
     <Compile Include="ObjectHelper.cs" />

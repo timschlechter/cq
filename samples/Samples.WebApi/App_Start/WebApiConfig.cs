@@ -1,9 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Web.Http;
-using CQ;
-using CQ.HttpApi.WebApi;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
+using CQ;
+using CQ.HttpApi.WebApi;
 using Samples.WebApi.Code;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
@@ -26,16 +27,20 @@ namespace Samples.WebApi
                 cfg.CommandRouteResolver = customRouteResolver;
                 cfg.QueryRouteResolver = customRouteResolver;
 
-                var customGroupKeyResolver = new CustomGroupKeyResolver();
-                cfg.CommandGroupKeyResolver = customGroupKeyResolver;
-                cfg.QueryGroupKeyResolver = customGroupKeyResolver;
-                
                 cfg.EnableCommandHandling(container.GetKnownCommandTypes(), container.DelegateCommandToHandler);
                 cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.DelegateQueryToHandler);
             });
 
             GlobalConfiguration.Configuration
-                .EnableSwagger(c => c.SingleApiVersion("v1", "Samples.WebApi"))
+                .EnableSwagger(cfg =>
+                {
+                    cfg.SingleApiVersion("v1", "Samples.WebApi");
+                    cfg.GroupActionsBy(apiDescription =>
+                    {
+                        var result = apiDescription.RelativePath.Replace("Api/", "");
+                        return result.Substring(0, result.IndexOf("/", StringComparison.InvariantCulture));
+                    });
+                })
                 .EnableSwaggerUi();
         }
 

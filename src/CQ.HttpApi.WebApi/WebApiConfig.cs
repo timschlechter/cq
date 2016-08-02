@@ -80,14 +80,12 @@ namespace CQ.HttpApi.WebApi
         protected virtual void RegisterCommandHandlerApiDescription(Type commandType, IHttpRoute route)
         {
             var apiExplorer = _httpConfiguration.Services.GetApiExplorer();
-            var groupKey = CommandGroupKeyResolver.ResolveGroupKey(commandType);
-
             var apiDescription = new ApiDescription
             {
                 Route = route,
                 HttpMethod = HttpMethod.Post,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType, groupKey)
+                ActionDescriptor = new CommandActionDescriptor(_httpConfiguration, commandType)
             };
 
             apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());
@@ -107,14 +105,13 @@ namespace CQ.HttpApi.WebApi
         protected virtual void RegisterQueryHandlerApiDescription(Type queryType, IHttpRoute route)
         {
             var apiExplorer = _httpConfiguration.Services.GetApiExplorer();
-            var groupKey = QueryGroupKeyResolver.ResolveGroupKey(queryType);
 
             var apiDescription = new ApiDescription
             {
                 Route = route,
                 HttpMethod = HttpMethod.Get,
                 RelativePath = route.RouteTemplate,
-                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType, groupKey)
+                ActionDescriptor = new QueryActionDescriptor(_httpConfiguration, queryType)
             };
 
             apiDescription.SupportedRequestBodyFormatters.Add(new JsonMediaTypeFormatter());
