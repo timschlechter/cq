@@ -8,10 +8,10 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
 {
     public abstract class OwinBaseTests
     {
-        [ThreadStatic] private static IDisposable _app;
-        [ThreadStatic] private static HttpApiClient _httpApiClient;
+        private static IDisposable _app;
+        private static HttpApiClient _httpApiClient;
 
-        private string RootUrl => "http://localhost:" + (12345 + System.Threading.Thread.CurrentThread.ManagedThreadId);
+        private string RootUrl = "http://localhost:12345";
 
         [SetUp]
         public virtual void SetUp()

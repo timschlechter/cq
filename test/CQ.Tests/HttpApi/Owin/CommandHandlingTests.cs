@@ -20,7 +20,7 @@ namespace CQ.HttpApi.Tests.HttpApi.Owin
                 Id = Guid.NewGuid();
             }
 
-            public Guid Id { get; private set; }
+            public Guid Id { get; set; }
         }
 
         public class IntegerListCommand : TestCommand
