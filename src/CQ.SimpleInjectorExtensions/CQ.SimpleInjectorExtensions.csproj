@@ -49,7 +49,6 @@
     </Compile>
     <Compile Include="ContainerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ContainerQueryProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

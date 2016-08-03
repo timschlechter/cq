@@ -7,9 +7,9 @@ namespace Business.CommandHandlers
 {
     public class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand>
     {
-        private readonly SamplesStorage _storage;
+        private readonly SampleStorage _storage;
 
-        public PlaceOrderCommandHandler(SamplesStorage storage)
+        public PlaceOrderCommandHandler(SampleStorage storage)
         {
             _storage = storage;
         }

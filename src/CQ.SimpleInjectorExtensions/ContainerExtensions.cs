@@ -1,12 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SimpleInjector;
 
 namespace CQ
 {
     public static class ContainerExtensions
     {
+        public static void RegisterCommandHandlers(this Container container, IEnumerable<Assembly> assemblies, params Type[] decorators)
+        {
+            container.Register(typeof(ICommandHandler<>), assemblies);
+        }
+
+        public static void DecorateCommandHandlersWith(this Container container, Type decoratorType)
+        {
+            container.RegisterDecorator(typeof(ICommandHandler<>), decoratorType);
+        }
+
+        public static void RegisterQueryHandlers(this Container container, IEnumerable<Assembly> assemblies, params Type[] decorators)
+        {
+            container.Register(typeof(IQueryHandler<,>), assemblies);
+        }
+        public static void DecorateQueryHandlersWith(this Container container, Type decoratorType)
+        {
+            container.RegisterDecorator(typeof(IQueryHandler<,>), decoratorType);
+        }
+
         public static void DelegateCommandToHandler(this Container container, object command)
         {
             var handlerFunction = container.ResolveCommandHandlerAction(command);

@@ -7,9 +7,9 @@ namespace Business.QueryHandlers
 {
     public class GetOrdersQueryHandler : IQueryHandler<GetOrdersQuery, Page<Order>>
     {
-        private readonly SamplesStorage _storage;
+        private readonly SampleStorage _storage;
 
-        public GetOrdersQueryHandler(SamplesStorage storage)
+        public GetOrdersQueryHandler(SampleStorage storage)
         {
             _storage = storage;
         }

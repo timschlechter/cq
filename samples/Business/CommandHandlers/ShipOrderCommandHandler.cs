@@ -7,16 +7,16 @@ namespace Business.CommandHandlers
 {
     public class ShipOrderCommandHandler : ICommandHandler<ShipOrderCommand>
     {
-        private readonly IQueryProcessor _queryProcessor;
+        private readonly IQueryHandler<GetOrderByIdQuery, Order> _getOrderByIdHandler;
 
-        public ShipOrderCommandHandler(IQueryProcessor queryProcessor)
+        public ShipOrderCommandHandler(IQueryHandler<GetOrderByIdQuery, Order> getOrderByIdHandler)
         {
-            _queryProcessor = queryProcessor;
+            _getOrderByIdHandler = getOrderByIdHandler;
         }
 
         public void Handle(ShipOrderCommand command)
         {
-            var order = _queryProcessor.Process(new GetOrderByIdQuery {OrderId = command.OrderId});
+            var order = _getOrderByIdHandler.Handle(new GetOrderByIdQuery {OrderId = command.OrderId});
 
             if (order == null)
             {

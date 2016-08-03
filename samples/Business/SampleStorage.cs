@@ -4,7 +4,7 @@ using Contracts.Model;
 
 namespace Business
 {
-    public class SamplesStorage
+    public class SampleStorage
     {
         public IList<Customer> Customers = new List<Customer>
         {

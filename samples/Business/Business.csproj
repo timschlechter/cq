@@ -51,7 +51,7 @@
     <Compile Include="QueryHandlers\GetCustomersQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetOrdersQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetOrderByIdQueryHandler.cs" />
-    <Compile Include="SamplesStorage.cs" />
+    <Compile Include="SampleStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\CQ.SimpleInjectorExtensions\CQ.SimpleInjectorExtensions.csproj">

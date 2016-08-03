@@ -5,6 +5,8 @@ using CQ.HttpApi.Owin;
 using Owin;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
+using CQ.CommandHandlerDecorators;
+using CQ.QueryHandlerDecorators;
 using SimpleInjector;
 using SimpleInjector.Extensions.ExecutionContextScoping;
 
@@ -31,11 +33,14 @@ namespace Sample.Owin.SelfHost
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new ExecutionContextScopeLifestyle();
 
-            container.Register(typeof (ICommandHandler<>), CommandAssemblies);
-            container.Register(typeof (IQueryHandler<,>), QueryAssemblies);
-            container.Register<IQueryProcessor, ContainerQueryProcessor>();
+            container.RegisterCommandHandlers(CommandAssemblies);
+            container.DecorateCommandHandlersWith(typeof(ValidationCommandHandlerDecorator<>));
+            container.DecorateCommandHandlersWith(typeof(TransactionCommandHandlerDecorator<>));
 
-            container.RegisterSingleton<SamplesStorage>();
+            container.RegisterQueryHandlers(QueryAssemblies);
+            container.DecorateQueryHandlersWith(typeof(ValidationQueryHandlerDecorator<,>));
+
+            container.RegisterSingleton<SampleStorage>();
 
             container.Verify();
 

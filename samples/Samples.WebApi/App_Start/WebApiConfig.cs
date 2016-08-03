@@ -5,7 +5,9 @@ using Business;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
 using CQ;
+using CQ.CommandHandlerDecorators;
 using CQ.HttpApi.WebApi;
+using CQ.QueryHandlerDecorators;
 using Samples.WebApi.Code;
 using SimpleInjector.Integration.WebApi;
 using Swashbuckle.Application;
@@ -53,11 +55,14 @@ namespace Samples.WebApi
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new WebApiRequestLifestyle();
 
-            container.Register(typeof (ICommandHandler<>), CommandAssemblies);
-            container.Register(typeof (IQueryHandler<,>), QueryAssemblies);
-            container.Register<IQueryProcessor, ContainerQueryProcessor>();
+            container.RegisterCommandHandlers(CommandAssemblies);
+            container.DecorateCommandHandlersWith(typeof(ValidationCommandHandlerDecorator<>));
+            container.DecorateCommandHandlersWith(typeof(TransactionCommandHandlerDecorator<>));
 
-            container.RegisterSingleton<SamplesStorage>();
+            container.RegisterQueryHandlers(QueryAssemblies);
+            container.DecorateQueryHandlersWith(typeof(ValidationQueryHandlerDecorator<,>));
+
+            container.RegisterSingleton<SampleStorage>();
             
             container.Verify();
 
