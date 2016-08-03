@@ -100,17 +100,17 @@
       <Project>{3338895A-2D80-4393-8207-B7249E453D0C}</Project>
       <Name>CQ.HttpApi.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\CQ.HttpApi.WebApi\CQ.HttpApi.WebApi.csproj">
+    <ProjectReference Include="..\..\src\CQ.Integration.WebApi\CQ.Integration.WebApi.csproj">
       <Project>{4F3D1041-A45C-498A-8276-7F3A675D96A7}</Project>
-      <Name>CQ.HttpApi.WebApi</Name>
+      <Name>CQ.Integration.WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\CQ.HttpApi\CQ.HttpApi.csproj">
       <Project>{61524EBF-325E-4B5F-AF61-D0CAB5F009D6}</Project>
       <Name>CQ.HttpApi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\CQ.HttpApi.Owin\CQ.HttpApi.Owin.csproj">
+    <ProjectReference Include="..\..\src\CQ.Integration.Owin\CQ.Integration.Owin.csproj">
       <Project>{b3188278-2b2e-4f03-b8f1-87d588ebf2c4}</Project>
-      <Name>CQ.HttpApi.Owin</Name>
+      <Name>CQ.Integration.Owin</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\CQ\CQ.csproj">
       <Project>{AC3BA93B-141D-4195-B4E2-A7253CC4629C}</Project>

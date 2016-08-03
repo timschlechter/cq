@@ -9,68 +9,6 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
     [TestFixture]
     public abstract class ServiceTestSuite
     {
-        [Test]
-        public void ExecuteQuery_IntegerListQuery_ItemsAreSerialized()
-        {
-            var query = new IntegerListQuery
-            {
-                Items = new List<int> {0, 1, 2},
-                FixedResult = new List<int> {3, 4, 5}
-            };
-
-            ExecuteQuery<IntegerListQuery, IList<int>>(query);
-
-            QueryShouldBeHandled(query);
-            NumberOfHandledQueriesShouldBe(1);
-        }
-
-        [Test]
-        public void ExecuteQuery_Simple_InvokesQueryHandler()
-        {
-            var query = new IntQuery {FixedResult = 1};
-
-            ExecuteQuery<IntQuery, int>(query);
-
-            QueryShouldBeHandled(query);
-            NumberOfHandledQueriesShouldBe(1);
-        }
-
-        [Test]
-        public void ExecuteCommand_Simple_InvokesCommandHandler()
-        {
-            var command = new TestCommand();
-
-            ExecuteCommand(command);
-
-            CommandShouldBeHandled(command);
-            NumberOfHandledCommandsShouldBe(1);
-        }
-
-        [Test]
-        public void ExecuteCommand_IntegerListCommand_ListItemsAreDeserialized()
-        {
-            var command = new IntegerListCommand {Items = new List<int> {0, 1, 2}};
-
-            ExecuteCommand(command);
-
-            CommandShouldBeHandled(command);
-            NumberOfHandledCommandsShouldBe(1);
-
-            var handledCommand = GetHandledCommand<IntegerListCommand>(command.Id);
-
-            Assert.AreEqual(3, handledCommand.Items.Count);
-            Assert.AreEqual(0, handledCommand.Items[0]);
-            Assert.AreEqual(1, handledCommand.Items[1]);
-            Assert.AreEqual(2, handledCommand.Items[2]);
-        }
-
-        #region Helpers
-
-        private static HttpApiClient _httpApiClient;
-        private readonly string _rootUrl = "http://localhost:12345";
-        private IList<TestCommand> _handledCommands;
-        private IDictionary<ITestQuery, object> _handledQueries;
-
         [SetUp]
         public virtual void SetUp()
         {
@@ -81,14 +19,14 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
             var commandTypes = new[]
             {
-                typeof (TestCommand),
-                typeof (IntegerListCommand)
+                typeof(TestCommand),
+                typeof(IntegerListCommand)
             };
 
             var queryTypes = new[]
             {
-                typeof (IntQuery),
-                typeof (IntegerListQuery)
+                typeof(IntQuery),
+                typeof(IntegerListQuery)
             };
 
             Action<object> handleCommand = command => { _handledCommands.Add(command as TestCommand); };
@@ -103,10 +41,6 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             StartService(_rootUrl, commandTypes, handleCommand, queryTypes, handleQuery);
         }
 
-        protected abstract void StartService(string rootUrl, Type[] commandTypes, Action<object> handleCommand, Type[] queryTypes, Func<object, object> handleQuery);
-
-        protected abstract void StopService();
-
         [TearDown]
         public void Cleanup()
         {
@@ -114,6 +48,15 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
             StopService();
         }
+
+        private static HttpApiClient _httpApiClient;
+        private readonly string _rootUrl = "http://localhost:12345";
+        private IList<TestCommand> _handledCommands;
+        private IDictionary<ITestQuery, object> _handledQueries;
+
+        protected abstract void StartService(string rootUrl, Type[] commandTypes, Action<object> handleCommand, Type[] queryTypes, Func<object, object> handleQuery);
+
+        protected abstract void StopService();
 
 
         protected void ExecuteCommand<TCommand>(TCommand command)
@@ -161,7 +104,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             Assert.AreEqual(expectedCount, _handledCommands.Count, "NumberOfHandledCommandsShouldBe");
         }
 
-        
+
         public interface ITestQuery
         {
             Guid Id { get; set; }
@@ -204,6 +147,59 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             Assert.AreEqual(expectedCount, _handledQueries.Count, "NumberOfHandledQueriesShouldBe");
         }
 
-        #endregion
+        [Test]
+        public void ExecuteCommand_IntegerListCommand_ListItemsAreDeserialized()
+        {
+            var command = new IntegerListCommand {Items = new List<int> {0, 1, 2}};
+
+            ExecuteCommand(command);
+
+            CommandShouldBeHandled(command);
+            NumberOfHandledCommandsShouldBe(1);
+
+            var handledCommand = GetHandledCommand<IntegerListCommand>(command.Id);
+
+            Assert.AreEqual(3, handledCommand.Items.Count);
+            Assert.AreEqual(0, handledCommand.Items[0]);
+            Assert.AreEqual(1, handledCommand.Items[1]);
+            Assert.AreEqual(2, handledCommand.Items[2]);
+        }
+
+        [Test]
+        public void ExecuteCommand_Simple_InvokesCommandHandler()
+        {
+            var command = new TestCommand();
+
+            ExecuteCommand(command);
+
+            CommandShouldBeHandled(command);
+            NumberOfHandledCommandsShouldBe(1);
+        }
+
+        [Test]
+        public void ExecuteQuery_IntegerListQuery_ItemsAreSerialized()
+        {
+            var query = new IntegerListQuery
+            {
+                Items = new List<int> {0, 1, 2},
+                FixedResult = new List<int> {3, 4, 5}
+            };
+
+            ExecuteQuery<IntegerListQuery, IList<int>>(query);
+
+            QueryShouldBeHandled(query);
+            NumberOfHandledQueriesShouldBe(1);
+        }
+
+        [Test]
+        public void ExecuteQuery_Simple_InvokesQueryHandler()
+        {
+            var query = new IntQuery {FixedResult = 1};
+
+            ExecuteQuery<IntQuery, int>(query);
+
+            QueryShouldBeHandled(query);
+            NumberOfHandledQueriesShouldBe(1);
+        }
     }
 }

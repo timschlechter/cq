@@ -4,7 +4,7 @@ using CQ.HttpApi.RouteResolving;
 namespace Samples.WebApi.Code
 {
     /// <summary>
-    /// Simple resolver used to demonstrate custom path resolving
+    ///     Simple resolver used to demonstrate custom path resolving
     /// </summary>
     public class CustomRouteResolver : IRouteResolver
     {

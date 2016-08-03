@@ -1,12 +1,12 @@
 using System.Reflection;
 using Business;
-using CQ;
-using CQ.HttpApi.Owin;
-using Owin;
 using Business.CommandHandlers;
 using Business.QueryHandlers;
+using CQ;
 using CQ.CommandHandlerDecorators;
+using CQ.Integration.Owin;
 using CQ.QueryHandlerDecorators;
+using Owin;
 using SimpleInjector;
 using SimpleInjector.Extensions.ExecutionContextScoping;
 
@@ -14,8 +14,8 @@ namespace Sample.Owin.SelfHost
 {
     internal class Startup
     {
-        private static readonly Assembly[] CommandAssemblies = {typeof (PlaceOrderCommandHandler).Assembly};
-        private static readonly Assembly[] QueryAssemblies = {typeof (GetOrderByIdQueryHandler).Assembly};
+        private static readonly Assembly[] CommandAssemblies = {typeof(PlaceOrderCommandHandler).Assembly};
+        private static readonly Assembly[] QueryAssemblies = {typeof(GetOrderByIdQueryHandler).Assembly};
 
         public void Configuration(IAppBuilder app)
         {

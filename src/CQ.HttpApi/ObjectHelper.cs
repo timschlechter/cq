@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace CQ.HttpApi
                 var propertyType = pi.PropertyType;
                 var propertyName = pi.Name;
 
-                if (propertyType == typeof (object))
+                if (propertyType == typeof(object))
                 {
                     propertyType = propertyValue.GetType();
                 }
@@ -40,7 +39,7 @@ namespace CQ.HttpApi
                 {
                     // skip
                 }
-                else if (propertyType.IsValueType || propertyType == typeof (string))
+                else if (propertyType.IsValueType || propertyType == typeof(string))
                 {
                     result.Add(new KeyValuePair<string, dynamic>(namePrefix + propertyName, propertyValue));
                 }

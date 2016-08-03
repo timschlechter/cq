@@ -1,7 +1,6 @@
-﻿using System;
-using CQ;
-using Contracts.Commands.Orders;
+﻿using Contracts.Commands.Orders;
 using Contracts.Model;
+using CQ;
 
 namespace Business.CommandHandlers
 {

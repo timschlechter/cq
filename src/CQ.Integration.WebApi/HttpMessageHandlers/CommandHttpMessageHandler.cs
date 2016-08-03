@@ -5,13 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using CQ.HttpApi.JsonSerialization;
 
-namespace CQ.HttpApi.WebApi.HttpMessageHandlers
+namespace CQ.Integration.WebApi.HttpMessageHandlers
 {
     public class CommandHttpMessageHandler : DelegatingHandler
     {
+        private readonly Type _commandType;
         private readonly Action<object> _handleCommand;
         private readonly IJsonSerializer _serializer;
-        private readonly Type _commandType;
 
         public CommandHttpMessageHandler(Type commandType, Action<object> handleCommand, IJsonSerializer serializer)
         {

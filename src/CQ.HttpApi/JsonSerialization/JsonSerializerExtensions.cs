@@ -5,7 +5,7 @@ namespace CQ.HttpApi.JsonSerialization
 {
     public static class JsonSerializerExtensions
     {
-        public static object MakeStronglyTyped(this IJsonSerializer serializer, object source, Type targetType)
+        public static object MakeTyped(this IJsonSerializer serializer, object source, Type targetType)
         {
             using (var stream = new MemoryStream())
             {
@@ -46,12 +46,12 @@ namespace CQ.HttpApi.JsonSerialization
 
         public static T Deserialize<T>(this IJsonSerializer serializer, string json)
         {
-            return (T)serializer.Deserialize(json, typeof (T));
+            return (T) serializer.Deserialize(json, typeof(T));
         }
 
         public static T Deserialize<T>(this IJsonSerializer serializer, Stream stream)
         {
-            return (T)serializer.Deserialize(stream, typeof(T));
+            return (T) serializer.Deserialize(stream, typeof(T));
         }
     }
 }

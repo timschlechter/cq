@@ -1,7 +1,7 @@
 using System;
 using System.Web.Http;
 
-namespace CQ.HttpApi.WebApi
+namespace CQ.Integration.WebApi
 {
     public static class HttpConfigurationExtensions
     {

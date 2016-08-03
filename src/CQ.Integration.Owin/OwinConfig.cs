@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CQ.HttpApi;
 using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 using Microsoft.Owin;
 using Owin;
 
-namespace CQ.HttpApi.Owin
+namespace CQ.Integration.Owin
 {
     public class OwinConfig : HttpApiConfig
     {
@@ -55,7 +56,7 @@ namespace CQ.HttpApi.Owin
 
                     var eo = ObjectHelper.Expand(parameters);
 
-                    var query = JsonSerializer.MakeStronglyTyped((object)eo, queryType);
+                    var query = JsonSerializer.MakeTyped((object) eo, queryType);
                     var result = handleQuery(query);
                     context.Response.ContentType = "application/json";
                     JsonSerializer.Serialize(result, context.Response.Body);

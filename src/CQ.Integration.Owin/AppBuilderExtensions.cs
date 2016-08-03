@@ -1,7 +1,7 @@
 ﻿using System;
 using Owin;
 
-namespace CQ.HttpApi.Owin
+namespace CQ.Integration.Owin
 {
     public static class AppBuilderExtensions
     {

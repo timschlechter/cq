@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Http;
-using CQ.HttpApi.WebApi;
+using CQ.Integration.WebApi;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
 using Owin;

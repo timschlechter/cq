@@ -16,6 +16,6 @@ namespace Contracts.Model
         public string Name { get; set; }
 
         [DataMember(Name = "birthDate")]
-        public DateTime? BirthDate{ get; set; }
+        public DateTime? BirthDate { get; set; }
     }
 }

@@ -383,10 +383,10 @@ namespace SimpleJson
             // </pex>
             var targetType = binder.Type;
 
-            if ((targetType == typeof (IEnumerable)) ||
-                (targetType == typeof (IEnumerable<KeyValuePair<string, object>>)) ||
-                (targetType == typeof (IDictionary<string, object>)) ||
-                (targetType == typeof (IDictionary)))
+            if ((targetType == typeof(IEnumerable)) ||
+                (targetType == typeof(IEnumerable<KeyValuePair<string, object>>)) ||
+                (targetType == typeof(IDictionary<string, object>)) ||
+                (targetType == typeof(IDictionary)))
             {
                 result = this;
                 return true;
@@ -650,12 +650,12 @@ namespace SimpleJson
 
         public static T DeserializeObject<T>(string json, IJsonSerializerStrategy jsonSerializerStrategy)
         {
-            return (T) DeserializeObject(json, typeof (T), jsonSerializerStrategy);
+            return (T) DeserializeObject(json, typeof(T), jsonSerializerStrategy);
         }
 
         public static T DeserializeObject<T>(string json)
         {
-            return (T) DeserializeObject(json, typeof (T), null);
+            return (T) DeserializeObject(json, typeof(T), null);
         }
 
         /// <summary>
@@ -1306,7 +1306,7 @@ namespace SimpleJson
         internal IDictionary<Type, IDictionary<string, KeyValuePair<Type, ReflectionUtils.SetDelegate>>> SetCache;
 
         internal static readonly Type[] EmptyTypes = new Type[0];
-        internal static readonly Type[] ArrayConstructorParameterTypes = {typeof (int)};
+        internal static readonly Type[] ArrayConstructorParameterTypes = {typeof(int)};
 
         private static readonly string[] Iso8601Format =
         {
@@ -1387,7 +1387,7 @@ namespace SimpleJson
             if (type == null) throw new ArgumentNullException("type");
             var str = value as string;
 
-            if (type == typeof (Guid) && string.IsNullOrEmpty(str))
+            if (type == typeof(Guid) && string.IsNullOrEmpty(str))
                 return default(Guid);
 
             if (value == null)
@@ -1399,13 +1399,13 @@ namespace SimpleJson
             {
                 if (str.Length != 0) // We know it can't be null now.
                 {
-                    if (type == typeof (DateTime) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof (DateTime)))
+                    if (type == typeof(DateTime) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof(DateTime)))
                         return DateTime.ParseExact(str, Iso8601Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                    if (type == typeof (DateTimeOffset) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof (DateTimeOffset)))
+                    if (type == typeof(DateTimeOffset) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof(DateTimeOffset)))
                         return DateTimeOffset.ParseExact(str, Iso8601Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                    if (type == typeof (Guid) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof (Guid)))
+                    if (type == typeof(Guid) || (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof(Guid)))
                         return new Guid(str);
-                    if (type == typeof (Uri))
+                    if (type == typeof(Uri))
                     {
                         var isValid = Uri.IsWellFormedUriString(str, UriKind.RelativeOrAbsolute);
 
@@ -1416,24 +1416,24 @@ namespace SimpleJson
                         return null;
                     }
 
-                    if (type == typeof (string))
+                    if (type == typeof(string))
                         return str;
 
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>))
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
                         return Convert.ChangeType(str, type.GetGenericArguments().Single(), CultureInfo.InvariantCulture);
                     }
-                    
+
                     return Convert.ChangeType(str, type, CultureInfo.InvariantCulture);
                 }
-                if (type == typeof (Guid))
+                if (type == typeof(Guid))
                     obj = default(Guid);
-                else if (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof (Guid))
+                else if (ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof(Guid))
                     obj = null;
                 else
                     obj = str;
                 // Empty string case
-                if (!ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof (Guid))
+                if (!ReflectionUtils.IsNullableType(type) && Nullable.GetUnderlyingType(type) == typeof(Guid))
                     return str;
             }
             else if (value is bool)
@@ -1441,11 +1441,11 @@ namespace SimpleJson
 
             var valueIsLong = value is long;
             var valueIsDouble = value is double;
-            if ((valueIsLong && type == typeof (long)) || (valueIsDouble && type == typeof (double)))
+            if ((valueIsLong && type == typeof(long)) || (valueIsDouble && type == typeof(double)))
                 return value;
-            if ((valueIsDouble && type != typeof (double)) || (valueIsLong && type != typeof (long)))
+            if ((valueIsDouble && type != typeof(double)) || (valueIsLong && type != typeof(long)))
             {
-                obj = type == typeof (int) || type == typeof (long) || type == typeof (double) || type == typeof (float) || type == typeof (bool) || type == typeof (decimal) || type == typeof (byte) || type == typeof (short)
+                obj = type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(float) || type == typeof(bool) || type == typeof(decimal) || type == typeof(byte) || type == typeof(short)
                     ? Convert.ChangeType(value, type, CultureInfo.InvariantCulture)
                     : value;
             }
@@ -1463,7 +1463,7 @@ namespace SimpleJson
                         var keyType = types[0];
                         var valueType = types[1];
 
-                        var genericType = typeof (Dictionary<,>).MakeGenericType(keyType, valueType);
+                        var genericType = typeof(Dictionary<,>).MakeGenericType(keyType, valueType);
 
                         var dict = (IDictionary) ConstructorCache[genericType]();
 
@@ -1474,7 +1474,7 @@ namespace SimpleJson
                     }
                     else
                     {
-                        if (type == typeof (object))
+                        if (type == typeof(object))
                             obj = value;
                         else
                         {
@@ -1506,10 +1506,10 @@ namespace SimpleJson
                             foreach (var o in jsonObject)
                                 list[i++] = DeserializeObject(o, type.GetElementType());
                         }
-                        else if (ReflectionUtils.IsTypeGenericeCollectionInterface(type) || ReflectionUtils.IsAssignableFrom(typeof (IList), type))
+                        else if (ReflectionUtils.IsTypeGenericeCollectionInterface(type) || ReflectionUtils.IsAssignableFrom(typeof(IList), type))
                         {
                             var innerType = ReflectionUtils.GetGenericListElementType(type);
-                            list = (IList) (ConstructorCache[type] ?? ConstructorCache[typeof (List<>).MakeGenericType(innerType)])(jsonObject.Count);
+                            list = (IList) (ConstructorCache[type] ?? ConstructorCache[typeof(List<>).MakeGenericType(innerType)])(jsonObject.Count);
                             foreach (var o in jsonObject)
                                 list.Add(DeserializeObject(o, innerType));
                         }
@@ -1591,7 +1591,7 @@ namespace SimpleJson
 
         internal override IDictionary<string, ReflectionUtils.GetDelegate> GetterValueFactory(Type type)
         {
-            var hasDataContract = ReflectionUtils.GetAttribute(type, typeof (DataContractAttribute)) != null;
+            var hasDataContract = ReflectionUtils.GetAttribute(type, typeof(DataContractAttribute)) != null;
             if (!hasDataContract)
                 return base.GetterValueFactory(type);
             string jsonKey;
@@ -1615,7 +1615,7 @@ namespace SimpleJson
 
         internal override IDictionary<string, KeyValuePair<Type, ReflectionUtils.SetDelegate>> SetterValueFactory(Type type)
         {
-            var hasDataContract = ReflectionUtils.GetAttribute(type, typeof (DataContractAttribute)) != null;
+            var hasDataContract = ReflectionUtils.GetAttribute(type, typeof(DataContractAttribute)) != null;
             if (!hasDataContract)
                 return base.SetterValueFactory(type);
             string jsonKey;
@@ -1641,9 +1641,9 @@ namespace SimpleJson
         private static bool CanAdd(MemberInfo info, out string jsonKey)
         {
             jsonKey = null;
-            if (ReflectionUtils.GetAttribute(info, typeof (IgnoreDataMemberAttribute)) != null)
+            if (ReflectionUtils.GetAttribute(info, typeof(IgnoreDataMemberAttribute)) != null)
                 return false;
-            var dataMemberAttribute = (DataMemberAttribute) ReflectionUtils.GetAttribute(info, typeof (DataMemberAttribute));
+            var dataMemberAttribute = (DataMemberAttribute) ReflectionUtils.GetAttribute(info, typeof(DataMemberAttribute));
             if (dataMemberAttribute == null)
                 return false;
             jsonKey = string.IsNullOrEmpty(dataMemberAttribute.Name) ? info.Name : dataMemberAttribute.Name;
@@ -1711,7 +1711,7 @@ namespace SimpleJson
                 foreach (var implementedInterface in interfaces)
                 {
                     if (IsTypeGeneric(implementedInterface) &&
-                        implementedInterface.GetGenericTypeDefinition() == typeof (IList<>))
+                        implementedInterface.GetGenericTypeDefinition() == typeof(IList<>))
                     {
                         return GetGenericTypeArguments(implementedInterface)[0];
                     }
@@ -1753,9 +1753,9 @@ namespace SimpleJson
 
                 var genericDefinition = type.GetGenericTypeDefinition();
 
-                return genericDefinition == typeof (IList<>)
-                       || genericDefinition == typeof (ICollection<>)
-                       || genericDefinition == typeof (IEnumerable<>);
+                return genericDefinition == typeof(IList<>)
+                       || genericDefinition == typeof(ICollection<>)
+                       || genericDefinition == typeof(IEnumerable<>);
             }
 
             public static bool IsAssignableFrom(Type type1, Type type2)
@@ -1769,19 +1769,19 @@ namespace SimpleJson
                 if (typeof(IDictionary<,>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
                     return true;
 #else
-                if (typeof (IDictionary).IsAssignableFrom(type))
+                if (typeof(IDictionary).IsAssignableFrom(type))
                     return true;
 #endif
                 if (!GetTypeInfo(type).IsGenericType)
                     return false;
 
                 var genericDefinition = type.GetGenericTypeDefinition();
-                return genericDefinition == typeof (IDictionary<,>);
+                return genericDefinition == typeof(IDictionary<,>);
             }
 
             public static bool IsNullableType(Type type)
             {
-                return GetTypeInfo(type).IsGenericType && type.GetGenericTypeDefinition() == typeof (Nullable<>);
+                return GetTypeInfo(type).IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
             }
 
             public static object ToNullableType(object obj, Type nullableType)
@@ -1902,7 +1902,7 @@ namespace SimpleJson
             public static ConstructorDelegate GetConstructorByExpression(ConstructorInfo constructorInfo)
             {
                 var paramsInfo = constructorInfo.GetParameters();
-                var param = Expression.Parameter(typeof (object[]), "args");
+                var param = Expression.Parameter(typeof(object[]), "args");
                 var argsExp = new Expression[paramsInfo.Length];
                 for (var i = 0; i < paramsInfo.Length; i++)
                 {
@@ -1960,17 +1960,17 @@ namespace SimpleJson
             public static GetDelegate GetGetMethodByExpression(PropertyInfo propertyInfo)
             {
                 var getMethodInfo = GetGetterMethodInfo(propertyInfo);
-                var instance = Expression.Parameter(typeof (object), "instance");
+                var instance = Expression.Parameter(typeof(object), "instance");
                 var instanceCast = !IsValueType(propertyInfo.DeclaringType) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
-                var compiled = Expression.Lambda<Func<object, object>>(Expression.TypeAs(Expression.Call(instanceCast, getMethodInfo), typeof (object)), instance).Compile();
+                var compiled = Expression.Lambda<Func<object, object>>(Expression.TypeAs(Expression.Call(instanceCast, getMethodInfo), typeof(object)), instance).Compile();
                 return delegate(object source) { return compiled(source); };
             }
 
             public static GetDelegate GetGetMethodByExpression(FieldInfo fieldInfo)
             {
-                var instance = Expression.Parameter(typeof (object), "instance");
+                var instance = Expression.Parameter(typeof(object), "instance");
                 var member = Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo);
-                var compiled = Expression.Lambda<GetDelegate>(Expression.Convert(member, typeof (object)), instance).Compile();
+                var compiled = Expression.Lambda<GetDelegate>(Expression.Convert(member, typeof(object)), instance).Compile();
                 return delegate(object source) { return compiled(source); };
             }
 
@@ -2010,8 +2010,8 @@ namespace SimpleJson
             public static SetDelegate GetSetMethodByExpression(PropertyInfo propertyInfo)
             {
                 var setMethodInfo = GetSetterMethodInfo(propertyInfo);
-                var instance = Expression.Parameter(typeof (object), "instance");
-                var value = Expression.Parameter(typeof (object), "value");
+                var instance = Expression.Parameter(typeof(object), "instance");
+                var value = Expression.Parameter(typeof(object), "value");
                 var instanceCast = !IsValueType(propertyInfo.DeclaringType) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
                 var valueCast = !IsValueType(propertyInfo.PropertyType) ? Expression.TypeAs(value, propertyInfo.PropertyType) : Expression.Convert(value, propertyInfo.PropertyType);
                 var compiled = Expression.Lambda<Action<object, object>>(Expression.Call(instanceCast, setMethodInfo, valueCast), instance, value).Compile();
@@ -2020,8 +2020,8 @@ namespace SimpleJson
 
             public static SetDelegate GetSetMethodByExpression(FieldInfo fieldInfo)
             {
-                var instance = Expression.Parameter(typeof (object), "instance");
-                var value = Expression.Parameter(typeof (object), "value");
+                var instance = Expression.Parameter(typeof(object), "instance");
+                var value = Expression.Parameter(typeof(object), "value");
                 var compiled = Expression.Lambda<Action<object, object>>(
                     Assign(Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo), Expression.Convert(value, fieldInfo.FieldType)), instance, value).Compile();
                 return delegate(object source, object val) { compiled(source, val); };
@@ -2032,7 +2032,7 @@ namespace SimpleJson
 #if SIMPLE_JSON_TYPEINFO
                 return Expression.Assign(left, right);
 #else
-                var assign = typeof (Assigner<>).MakeGenericType(left.Type).GetMethod("Assign");
+                var assign = typeof(Assigner<>).MakeGenericType(left.Type).GetMethod("Assign");
                 var assignExpr = Expression.Add(left, right, assign);
                 return assignExpr;
 #endif

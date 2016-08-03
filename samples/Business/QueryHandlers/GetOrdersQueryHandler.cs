@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using CQ;
 using Contracts.Model;
 using Contracts.Queries.Orders;
+using CQ;
 
 namespace Business.QueryHandlers
 {

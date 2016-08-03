@@ -1,5 +1,5 @@
 ﻿using System;
-using CQ.HttpApi.Owin;
+using CQ.Integration.Owin;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
 

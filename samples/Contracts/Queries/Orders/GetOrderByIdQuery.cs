@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.Serialization;
-using CQ;
-using Contracts.Model;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using Contracts.Model;
+using CQ;
 
 namespace Contracts.Queries.Orders
 {

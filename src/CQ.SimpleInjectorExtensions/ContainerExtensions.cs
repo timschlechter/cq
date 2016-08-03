@@ -22,6 +22,7 @@ namespace CQ
         {
             container.Register(typeof(IQueryHandler<,>), assemblies);
         }
+
         public static void DecorateQueryHandlersWith(this Container container, Type decoratorType)
         {
             container.RegisterDecorator(typeof(IQueryHandler<,>), decoratorType);
@@ -53,7 +54,7 @@ namespace CQ
             }
 
             var commandType = command.GetType();
-            var commandHandlerType = typeof (ICommandHandler<>).MakeGenericType(commandType);
+            var commandHandlerType = typeof(ICommandHandler<>).MakeGenericType(commandType);
             dynamic commandHandler = container.GetInstance(commandHandlerType);
 
             return c => commandHandler.Handle((dynamic) c);
@@ -71,11 +72,15 @@ namespace CQ
             }
 
             var queryType = query.GetType();
-            var resultType = queryType.GetGenericArguments().Single();
-            var queryHandlerType = typeof (IQueryHandler<,>).MakeGenericType(queryType, resultType);
+
+            var resultType = queryType
+                .GetInterfaces().Single()
+                .GetGenericArguments().Single();
+
+            var queryHandlerType = typeof(IQueryHandler<,>).MakeGenericType(queryType, resultType);
             dynamic queryHandler = container.GetInstance(queryHandlerType);
 
-            return q => queryHandler.Handle((dynamic)q);
+            return q => queryHandler.Handle((dynamic) q);
         }
 
         public static IEnumerable<Type> GetKnownCommandTypes(this Container container)
@@ -93,13 +98,13 @@ namespace CQ
         public static IEnumerable<InstanceProducer> GetCommandHandlerRegistrations(this Container container)
         {
             return container.GetCurrentRegistrations()
-                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (ICommandHandler<>)));
+                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof(ICommandHandler<>)));
         }
 
         public static IEnumerable<InstanceProducer> GetQueryHandlerRegistrations(this Container container)
         {
             return container.GetCurrentRegistrations()
-                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof (IQueryHandler<,>)));
+                .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof(IQueryHandler<,>)));
         }
 
         private static bool ImplementsOpenGeneric(this Type type, Type openGenericType)

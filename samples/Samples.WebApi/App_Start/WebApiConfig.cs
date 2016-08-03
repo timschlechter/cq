@@ -6,19 +6,19 @@ using Business.CommandHandlers;
 using Business.QueryHandlers;
 using CQ;
 using CQ.CommandHandlerDecorators;
-using CQ.HttpApi.WebApi;
+using CQ.Integration.WebApi;
 using CQ.QueryHandlerDecorators;
 using Samples.WebApi.Code;
+using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using Swashbuckle.Application;
-using Container = SimpleInjector.Container;
 
 namespace Samples.WebApi
 {
     public class WebApiConfig
     {
-        private static readonly Assembly[] CommandAssemblies = {typeof (PlaceOrderCommandHandler).Assembly};
-        private static readonly Assembly[] QueryAssemblies = {typeof (GetOrderByIdQueryHandler).Assembly};
+        private static readonly Assembly[] CommandAssemblies = {typeof(PlaceOrderCommandHandler).Assembly};
+        private static readonly Assembly[] QueryAssemblies = {typeof(GetOrderByIdQueryHandler).Assembly};
 
         public static void Configure(HttpConfiguration config)
         {
@@ -63,7 +63,7 @@ namespace Samples.WebApi
             container.DecorateQueryHandlersWith(typeof(ValidationQueryHandlerDecorator<,>));
 
             container.RegisterSingleton<SampleStorage>();
-            
+
             container.Verify();
 
             return container;

@@ -15,7 +15,7 @@ namespace Business
 
         public IList<Order> Orders = new List<Order>
         {
-            new Order {Id = Guid.NewGuid(), ShippingAddress = new Address { City = "London", Street = "Downing Street"} }
+            new Order {Id = Guid.NewGuid(), ShippingAddress = new Address {City = "London", Street = "Downing Street"}}
         };
     }
 }

@@ -87,9 +87,9 @@
       <Project>{61524EBF-325E-4B5F-AF61-D0CAB5F009D6}</Project>
       <Name>CQ.HttpApi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\CQ.HttpApi.Owin\CQ.HttpApi.Owin.csproj">
+    <ProjectReference Include="..\..\src\CQ.Integration.Owin\CQ.Integration.Owin.csproj">
       <Project>{B3188278-2B2E-4F03-B8F1-87D588EBF2C4}</Project>
-      <Name>CQ.HttpApi.Owin</Name>
+      <Name>CQ.Integration.Owin</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\CQ.SimpleInjectorExtensions\CQ.SimpleInjectorExtensions.csproj">
       <Project>{64D7D5EB-8BCB-49B7-9D72-C91AF0AC0FFE}</Project>

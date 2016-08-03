@@ -11,7 +11,7 @@ namespace Contracts.Commands.Orders
     public class PlaceOrderCommand
     {
         [Required]
-        [DataMember(Name ="orderId")]
+        [DataMember(Name = "orderId")]
         public Guid OrderId { get; set; }
 
         [Required]

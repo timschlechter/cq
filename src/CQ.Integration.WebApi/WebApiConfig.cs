@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
@@ -10,10 +9,11 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Web.Http.Routing;
-using CQ.HttpApi.WebApi.ActionDescriptors;
-using CQ.HttpApi.WebApi.HttpMessageHandlers;
+using CQ.HttpApi;
+using CQ.Integration.WebApi.ActionDescriptors;
+using CQ.Integration.WebApi.HttpMessageHandlers;
 
-namespace CQ.HttpApi.WebApi
+namespace CQ.Integration.WebApi
 {
     public class WebApiConfig : HttpApiConfig
     {
@@ -136,7 +136,7 @@ namespace CQ.HttpApi.WebApi
         {
             return routePath != null && routePath.StartsWith("/") ? routePath.Substring(1) : routePath;
         }
-        
+
         private ParameterInfo CreateGenericParameterInfo(Type type)
         {
             return GetType().GetMethod("ParamInfoDummy", BindingFlags.NonPublic | BindingFlags.Instance)
