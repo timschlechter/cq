@@ -51,7 +51,7 @@ namespace CQ
             }
 
             var queryType = query.GetType();
-            var resultType = query.GetType().GetResultType();
+            var resultType = queryType.GetGenericArguments().Single();
             var queryHandlerType = typeof (IQueryHandler<,>).MakeGenericType(queryType, resultType);
             dynamic queryHandler = container.GetInstance(queryHandlerType);
 

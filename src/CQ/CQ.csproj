@@ -48,7 +48,6 @@
     <Compile Include="IQueryHandler.cs" />
     <Compile Include="IQueryProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Èxtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -19,7 +20,7 @@ namespace CQ.HttpApi.WebApi.ActionDescriptors
         }
 
         public override string ActionName => _queryType.Name;
-        public override Type ReturnType => _queryType.GetResultType();
+        public override Type ReturnType => _queryType.GetGenericArguments().Single();
 
         public override Collection<HttpParameterDescriptor> GetParameters()
         {
