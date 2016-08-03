@@ -14,17 +14,27 @@ namespace CQ.HttpApi.Tests.HttpApi.JsonSerialization
         }
 
         [Test]
-        public void Serialize_DynamicWithList()
+        public void Deserialize_SerializedList_HasSameItems()
         {
             var serializer = new SimpleJsonSerializer();
 
-            using (var stream = new MemoryStream())
-            {
-                serializer.Serialize(new Some {Items = new List<int> {0, 1, 2}}, stream);
-                stream.Position = 0;
+            var serialized = serializer.Serialize(new Some { Items = new List<int> { 0, 1, 2 } });
+            var deserialized = serializer.Deserialize<Some>(serialized);
+            
+            Assert.AreEqual(3, deserialized.Items.Count);
+            Assert.AreEqual(0, deserialized.Items[0]);
+            Assert.AreEqual(1, deserialized.Items[1]);
+            Assert.AreEqual(2, deserialized.Items[2]);
+        }
 
-                var actual = serializer.Deserialize(stream, typeof(Some));
-            }
+        [Test]
+        public void Serialize_StringValueWithDoubleQuote_EscapesValue()
+        {
+            var serializer = new SimpleJsonSerializer();
+
+            var serialized = serializer.Serialize("\"");
+
+            Assert.AreEqual("\"\\\"\"", serialized);
         }
     }
 }
