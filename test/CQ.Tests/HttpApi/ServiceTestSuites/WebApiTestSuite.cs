@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using CQ.HttpApi.JsonSerialization;
 using CQ.Integration.WebApi;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
@@ -22,6 +23,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
                 configuration.UseCQ(cfg =>
                 {
+                    cfg.JsonSerializer = new SimpleJsonSerializer();
                     cfg.EnableCommandHandling(commandTypes, handleCommand);
                     cfg.EnableQueryHandling(queryTypes, handleQuery);
                 });

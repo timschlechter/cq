@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,6 +24,8 @@ namespace CQ.Integration.WebApi
         public WebApiConfig(HttpConfiguration httpConfiguration)
         {
             _httpConfiguration = httpConfiguration;
+
+            JsonSerializer = new WebApiJsonSerializer(_httpConfiguration);
         }
 
         public WebApiConfig EnableCommandHandling(IEnumerable<Type> commandTypes, Action<object> handleCommand)
