@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CQ.HttpApi;
 using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 using RestSharp;
 
-namespace CQ.Client
+namespace CQ.HttpApi.Client
 {
     public class HttpApiClient
     {
         private readonly HttpApiConfig _config;
         private readonly string _rootUrl;
+        private readonly Lazy<RestClient> _restClient;
 
         public HttpApiClient(string rootUrl, Action<HttpApiConfig> configure = null)
         {
@@ -19,13 +19,25 @@ namespace CQ.Client
 
             _config = new HttpApiConfig();
 
-            if (configure != null)
+            configure?.Invoke(_config);
+
+            _restClient = new Lazy<RestClient>(() =>
             {
-                configure(_config);
-            }
+                var client = new RestClient(_rootUrl);
+                var serializer = new RestSharpJsonSerializer(_config.JsonSerializer);
+                client.AddHandler("application/json", serializer);
+                client.AddHandler("text/json", serializer);
+                client.AddHandler("text/x-json", serializer);
+                client.AddHandler("text/javascript", serializer);
+                client.AddHandler("*+json", serializer);
+
+                return client;
+            });
         }
 
-        public Task ExecuteCommand<TCommand>(TCommand command)
+        protected virtual RestClient RestClient => _restClient.Value;
+
+        public virtual Task ExecuteCommand<TCommand>(TCommand command)
         {
             var path = _config.CommandRouteResolver.ResolvePath(command);
             var req = new RestRequest(path, Method.POST)
@@ -43,7 +55,7 @@ namespace CQ.Client
             return ExecuteRequest<object>(req).ContinueWith(task => { });
         }
 
-        public Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
+        public virtual Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
             var path = _config.QueryRouteResolver.ResolvePath(query);
             var req = new RestRequest(path, Method.GET);
@@ -64,9 +76,7 @@ namespace CQ.Client
 
         protected virtual Task<TResult> ExecuteRequest<TResult>(IRestRequest req)
         {
-            var client = new RestClient(_rootUrl);
-
-            return client.ExecuteTaskAsync(req).ContinueWith(task =>
+            return RestClient.ExecuteTaskAsync<TResult>(req).ContinueWith(task =>
             {
                 var response = task.Result;
 
@@ -76,9 +86,7 @@ namespace CQ.Client
                     throw new HttpApiException(response.StatusDescription) {StatusCode = response.StatusCode};
                 }
 
-                return string.IsNullOrEmpty(response.Content)
-                    ? default(TResult)
-                    : _config.JsonSerializer.Deserialize<TResult>(response.Content);
+                return response.Data;
             });
         }
     }
