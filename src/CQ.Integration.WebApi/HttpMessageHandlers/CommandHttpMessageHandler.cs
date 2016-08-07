@@ -22,6 +22,8 @@ namespace CQ.Integration.WebApi.HttpMessageHandlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            request.GetDependencyScope();
+
             var stream = await request.Content.ReadAsStreamAsync();
             var command = _serializer.Deserialize(stream, _commandType);
             _handleCommand(command);

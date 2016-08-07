@@ -24,6 +24,8 @@ namespace CQ.Integration.WebApi.HttpMessageHandlers
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            request.GetDependencyScope();
+
             var expanded = ObjectHelper.ExpandQueryString(request.RequestUri.Query);
             var query = _serializer.MakeTyped(expanded, _queryType);
             var result = _handleQuery(query);
