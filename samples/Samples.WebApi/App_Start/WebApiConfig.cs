@@ -24,6 +24,8 @@ namespace Samples.WebApi
         {
             var container = ConfigureContainer();
 
+            config.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
+
             config.UseCQ(cfg =>
             {
                 var customRouteResolver = new CustomRouteResolver();
@@ -34,20 +36,18 @@ namespace Samples.WebApi
                 cfg.EnableQueryHandling(container.GetKnownQueryTypes(), container.DelegateQueryToHandler);
             });
 
-            GlobalConfiguration.Configuration
-                .EnableSwagger(cfg =>
+            config.EnableSwagger(cfg =>
+            {
+                cfg.SingleApiVersion("v1", "Samples.WebApi");
+                cfg.GroupActionsBy(apiDescription =>
                 {
-                    cfg.SingleApiVersion("v1", "Samples.WebApi");
-                    cfg.GroupActionsBy(apiDescription =>
-                    {
-                        var result = apiDescription.RelativePath.Replace("Api/", "");
-                        return result.Substring(0, result.IndexOf("/", StringComparison.InvariantCulture));
-                    });
+                    var result = apiDescription.RelativePath.Replace("Api/", "");
+                    return result.Substring(0, result.IndexOf("/", StringComparison.InvariantCulture));
+                });
 
-                    cfg.SchemaFilter<CustomSchemaFilter>();
-                    cfg.OperationFilter<CustomOperationFilter>();
-                })
-                .EnableSwaggerUi();
+                cfg.SchemaFilter<CustomSchemaFilter>();
+                cfg.OperationFilter<CustomOperationFilter>();
+            }).EnableSwaggerUi();
         }
 
         private static Container ConfigureContainer()
