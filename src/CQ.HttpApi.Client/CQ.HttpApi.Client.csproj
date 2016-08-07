@@ -7,8 +7,8 @@
     <ProjectGuid>{3338895A-2D80-4393-8207-B7249E453D0C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CQ.Client</RootNamespace>
-    <AssemblyName>CQ.Client</AssemblyName>
+    <RootNamespace>CQ.HttpApi.Client</RootNamespace>
+    <AssemblyName>CQ.HttpApi.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
