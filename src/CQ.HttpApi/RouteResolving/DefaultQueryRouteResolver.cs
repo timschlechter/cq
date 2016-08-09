@@ -2,7 +2,7 @@ using System;
 
 namespace CQ.HttpApi.RouteResolving
 {
-    public class SimpleQueryRouteResolver : IRouteResolver
+    public class DefaultQueryRouteResolver : IRouteResolver
     {
         public string ResolveRoutePath(Type type)
         {

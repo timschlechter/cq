@@ -9,10 +9,10 @@ namespace CQ.HttpApi
     {
         public HttpApiConfig()
         {
-            CommandRouteResolver = new SimpleCommandRouteResolver();
-            QueryRouteResolver = new SimpleQueryRouteResolver();
-            JsonSerializer = new SimpleJsonSerializer();
-            ExceptionHandler = new SimpleExceptionHandler();
+            CommandRouteResolver = new DefaultCommandRouteResolver();
+            QueryRouteResolver = new DefaultQueryRouteResolver();
+            JsonSerializer = new DefaultJsonSerializer();
+            ExceptionHandler = new DefaultExceptionHandler();
         }
 
         public IExceptionHandler ExceptionHandler { get; set; }

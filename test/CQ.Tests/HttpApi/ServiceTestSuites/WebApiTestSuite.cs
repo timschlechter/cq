@@ -23,7 +23,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
                 configuration.UseCQ(cfg =>
                 {
-                    cfg.JsonSerializer = new SimpleJsonSerializer();
+                    cfg.JsonSerializer = new DefaultJsonSerializer();
                     cfg.EnableCommandHandling(commandTypes, handleCommand);
                     cfg.EnableQueryHandling(queryTypes, handleQuery);
                 });

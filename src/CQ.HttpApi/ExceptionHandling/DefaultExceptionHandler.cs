@@ -2,7 +2,7 @@
 
 namespace CQ.HttpApi.ExceptionHandling
 {
-    public class SimpleExceptionHandler : IExceptionHandler
+    public class DefaultExceptionHandler : IExceptionHandler
     {
         public void Handle(Exception ex)
         {

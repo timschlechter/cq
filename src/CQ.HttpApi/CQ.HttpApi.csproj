@@ -40,19 +40,19 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="ExceptionHandling\IExceptionHandler.cs" />
-    <Compile Include="ExceptionHandling\SimpleExceptionHandler.cs" />
+    <Compile Include="ExceptionHandling\DefaultExceptionHandler.cs" />
     <Compile Include="HttpApiException.cs" />
     <Compile Include="JsonSerialization\JsonSerializerExtensions.cs" />
     <Compile Include="ObjectHelper.cs" />
     <Compile Include="RouteResolving\RouteResolverExtensions.cs" />
     <Compile Include="HttpApiConfig.cs" />
-    <Compile Include="JsonSerialization\SimpleJsonSerializer.cs" />
-    <Compile Include="RouteResolving\SimpleCommandRouteResolver.cs" />
+    <Compile Include="JsonSerialization\DefaultJsonSerializer.cs" />
+    <Compile Include="RouteResolving\DefaultCommandRouteResolver.cs" />
     <Compile Include="JsonSerialization\IJsonSerializer.cs" />
     <Compile Include="RouteResolving\IRouteResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JsonSerialization\SimpleJson.cs" />
-    <Compile Include="RouteResolving\SimpleQueryRouteResolver.cs" />
+    <Compile Include="RouteResolving\DefaultQueryRouteResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

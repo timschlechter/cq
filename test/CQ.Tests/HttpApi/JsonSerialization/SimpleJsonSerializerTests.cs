@@ -16,7 +16,7 @@ namespace CQ.HttpApi.Tests.HttpApi.JsonSerialization
         [Test]
         public void Deserialize_SerializedList_HasSameItems()
         {
-            var serializer = new SimpleJsonSerializer();
+            var serializer = new DefaultJsonSerializer();
 
             var serialized = serializer.Serialize(new Some { Items = new List<int> { 0, 1, 2 } });
             var deserialized = serializer.Deserialize<Some>(serialized);
@@ -30,7 +30,7 @@ namespace CQ.HttpApi.Tests.HttpApi.JsonSerialization
         [Test]
         public void Serialize_StringValueWithDoubleQuote_EscapesValue()
         {
-            var serializer = new SimpleJsonSerializer();
+            var serializer = new DefaultJsonSerializer();
 
             var serialized = serializer.Serialize("\"");
 

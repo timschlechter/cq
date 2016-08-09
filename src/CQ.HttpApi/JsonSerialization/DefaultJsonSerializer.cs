@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CQ.HttpApi.JsonSerialization
 {
-    public class SimpleJsonSerializer : IJsonSerializer
+    public class DefaultJsonSerializer : IJsonSerializer
     {
         public void Serialize(object value, Stream stream)
         {
