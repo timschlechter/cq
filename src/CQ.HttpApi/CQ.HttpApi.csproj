@@ -39,6 +39,8 @@
     <Compile Include="..\..\etc\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
+    <Compile Include="ExceptionHandling\IExceptionHandler.cs" />
+    <Compile Include="ExceptionHandling\SimpleExceptionHandler.cs" />
     <Compile Include="HttpApiException.cs" />
     <Compile Include="JsonSerialization\JsonSerializerExtensions.cs" />
     <Compile Include="ObjectHelper.cs" />

@@ -26,15 +26,24 @@ namespace CQ.Integration.Owin
             CommandTypes = (commandTypes ?? Enumerable.Empty<Type>()).ToArray();
             _app.Use(async (context, next) =>
             {
-                var commandType = GetCommandType(context);
-
-                if (commandType != null)
+                if (context.Request.Method == "POST")
                 {
-                    var command = JsonSerializer.Deserialize(context.Request.Body, commandType);
+                    try
+                    {
+                        var commandType = GetCommandType(context);
 
-                    handleCommand(command);
+                        if (commandType != null)
+                        {
+                            var command = JsonSerializer.Deserialize(context.Request.Body, commandType);
+
+                            handleCommand(command);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionHandler.Handle(ex);
+                    }
                 }
-
                 await next();
             });
             return this;
@@ -45,16 +54,26 @@ namespace CQ.Integration.Owin
             QueryTypes = (queryTypes ?? Enumerable.Empty<Type>()).ToArray();
             _app.Use(async (context, next) =>
             {
-                var queryType = GetQueryType(context);
-
-                if (queryType != null)
+                if (context.Request.Method == "GET")
                 {
-                    var eo = ObjectHelper.ExpandQueryString(context.Request.QueryString.Value);
+                    var queryType = GetQueryType(context);
 
-                    var query = JsonSerializer.MakeTyped((object) eo, queryType);
-                    var result = handleQuery(query);
-                    context.Response.ContentType = "application/json";
-                    JsonSerializer.Serialize(result, context.Response.Body);
+                    if (queryType != null)
+                    {
+                        try
+                        {
+                            var eo = ObjectHelper.ExpandQueryString(context.Request.QueryString.Value);
+
+                            var query = JsonSerializer.MakeTyped(eo, queryType);
+                            var result = handleQuery(query);
+                            context.Response.ContentType = "application/json";
+                            JsonSerializer.Serialize(result, context.Response.Body);
+                        }
+                        catch (Exception ex)
+                        {
+                            ExceptionHandler.Handle(ex);
+                        }
+                    }
                 }
                 await next();
             });
