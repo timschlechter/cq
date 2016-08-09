@@ -13,7 +13,8 @@ namespace CQ.Integration.WebApi.HttpMessageHandlers
         private readonly Action<object> _handleCommand;
         private readonly IJsonSerializer _serializer;
 
-        public CommandHttpMessageHandler(Type commandType, Action<object> handleCommand, IJsonSerializer serializer)
+        public 
+            CommandHttpMessageHandler(Type commandType, Action<object> handleCommand, IJsonSerializer serializer)
         {
             _commandType = commandType;
             _handleCommand = handleCommand;

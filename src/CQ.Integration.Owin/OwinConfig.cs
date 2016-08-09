@@ -69,14 +69,20 @@ namespace CQ.Integration.Owin
         private Type GetCommandType(IOwinContext context)
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
-
+            if (path.StartsWith("/"))
+            {
+                path = path.Substring(1);
+            }
             return CommandTypes.FindTypeByPath(path, CommandRouteResolver);
         }
 
         private Type GetQueryType(IOwinContext context)
         {
             var path = context.Request.Path.HasValue ? context.Request.Path.Value : string.Empty;
-
+            if (path.StartsWith("/"))
+            {
+                path = path.Substring(1);
+            }
             return QueryTypes.FindTypeByPath(path, QueryRouteResolver);
         }
     }

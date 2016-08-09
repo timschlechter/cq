@@ -6,7 +6,7 @@ namespace CQ.HttpApi.RouteResolving
     {
         public string ResolveRoutePath(Type type)
         {
-            return type == null ? null : $"/Queries/{type.Name}";
+            return type == null ? null : $"Queries/{type.Name}";
         }
     }
 }
