@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using CQ.HttpApi.Client;
 using NUnit.Framework;
 
@@ -20,6 +21,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             var commandTypes = new[]
             {
                 typeof(TestCommand),
+                typeof(ErrorCommand),
                 typeof(IntegerListCommand)
             };
 
@@ -29,7 +31,15 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
                 typeof(IntegerListQuery)
             };
 
-            Action<object> handleCommand = command => { _handledCommands.Add(command as TestCommand); };
+            Action<object> handleCommand = command =>
+            {
+                _handledCommands.Add(command as TestCommand);
+
+                if (command is ErrorCommand)
+                {
+                    throw new Exception("ErrorCommand Message");
+                }
+            };
 
             Func<object, object> handleQuery = query =>
             {
@@ -61,14 +71,45 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
         protected void ExecuteCommand<TCommand>(TCommand command)
         {
-            _httpApiClient.ExecuteCommand(command).Wait(250);
+            var task = _httpApiClient.ExecuteCommand(command);
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
+        protected void ExpectException<T>(Action action, Action<T> asserter)
+            where T : Exception
+        {
+            var thrown = false;
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(typeof(T), ex.GetType());
+
+                asserter((T) ex);
+
+                thrown = true;
+            }
+
+            if (!thrown)
+            {
+                Assert.Fail("Expected Exception was not thrown");
+            }
         }
 
         protected TResult ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
         {
             var task = _httpApiClient.ExecuteQuery<TQuery, TResult>(query);
 
-            task.Wait(250);
+            task.Wait();
 
             return task.Result;
         }
@@ -81,6 +122,10 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             }
 
             public Guid Id { get; set; }
+        }
+
+        public class ErrorCommand : TestCommand
+        {
         }
 
         public class IntegerListCommand : TestCommand
@@ -103,7 +148,6 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
         {
             Assert.AreEqual(expectedCount, _handledCommands.Count, "NumberOfHandledCommandsShouldBe");
         }
-
 
         public interface ITestQuery
         {
@@ -174,6 +218,19 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
 
             CommandShouldBeHandled(command);
             NumberOfHandledCommandsShouldBe(1);
+        }
+
+        [Test]
+        public void ExecuteCommand_ThrowsException()
+        {
+            ExpectException<HttpApiException>(
+                () => ExecuteCommand(new ErrorCommand()),
+                ex =>
+                {
+                    Assert.IsNotNull(ex);
+                    Assert.AreEqual(HttpStatusCode.InternalServerError, ex.StatusCode);
+                    Assert.AreEqual("ErrorCommand Message", ex.Message);
+                });
         }
 
         [Test]

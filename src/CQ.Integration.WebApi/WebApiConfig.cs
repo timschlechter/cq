@@ -66,7 +66,7 @@ namespace CQ.Integration.WebApi
                 routeTemplate,
                 new {},
                 new {},
-                new CommandHttpMessageHandler(commandType, handleCommand, JsonSerializer));
+                new CommandHttpMessageHandler(commandType, handleCommand, JsonSerializer, HttpStatusCodeResolver));
         }
 
         protected virtual IHttpRoute RegisterQueryHandlerRoute(Type queryType, Func<object, object> handleQuery)
@@ -79,7 +79,7 @@ namespace CQ.Integration.WebApi
                 routeTemplate,
                 new {},
                 new {},
-                new QueryHttpMessageHandler(queryType, handleQuery, JsonSerializer));
+                new QueryHttpMessageHandler(queryType, handleQuery, JsonSerializer, HttpStatusCodeResolver));
         }
 
         protected virtual void RegisterCommandHandlerApiDescription(Type commandType, IHttpRoute route)

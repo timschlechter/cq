@@ -52,7 +52,7 @@ namespace CQ.HttpApi.Client
                 Type = ParameterType.RequestBody
             });
 
-            return ExecuteRequest<object>(req).ContinueWith(task => { });
+            return ExecuteRequest<object>(req);
         }
 
         public virtual Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
@@ -83,7 +83,18 @@ namespace CQ.HttpApi.Client
                 var status = (int) response.StatusCode;
                 if (status < 200 || status >= 400)
                 {
-                    throw new HttpApiException(response.StatusDescription) {StatusCode = response.StatusCode};
+                    Error error = null;
+
+                    try
+                    {
+                        error = _config.JsonSerializer.Deserialize<Error>(response.Content);
+                    }
+                    catch (Exception)
+                    {
+                        throw new HttpApiException(response.StatusDescription) { StatusCode = response.StatusCode };
+                    }
+
+                    throw new HttpApiException(error.Message) { ErrorCode = error.Code, StatusCode = response.StatusCode };
                 }
 
                 return response.Data;

@@ -1,5 +1,5 @@
 ﻿using System.Reflection.Emit;
-using CQ.HttpApi.ExceptionHandling;
+using CQ.HttpApi.HttpStatusCodeResolving;
 using CQ.HttpApi.JsonSerialization;
 using CQ.HttpApi.RouteResolving;
 
@@ -12,10 +12,10 @@ namespace CQ.HttpApi
             CommandRouteResolver = new DefaultCommandRouteResolver();
             QueryRouteResolver = new DefaultQueryRouteResolver();
             JsonSerializer = new DefaultJsonSerializer();
-            ExceptionHandler = new DefaultExceptionHandler();
+            HttpStatusCodeResolver = new DefaultHttpStatusCodeResolver();
         }
 
-        public IExceptionHandler ExceptionHandler { get; set; }
+        public IHttpStatusCodeResolver HttpStatusCodeResolver { get; set; }
 
         public IJsonSerializer JsonSerializer { get; set; }
 

@@ -39,9 +39,9 @@
     <Compile Include="..\..\etc\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
-    <Compile Include="ExceptionHandling\IExceptionHandler.cs" />
-    <Compile Include="ExceptionHandling\DefaultExceptionHandler.cs" />
-    <Compile Include="HttpApiException.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="HttpStatusCodeResolving\IHttpStatusCodeResolver.cs" />
+    <Compile Include="HttpStatusCodeResolving\DefaultHttpStatusCodeResolver.cs" />
     <Compile Include="JsonSerialization\JsonSerializerExtensions.cs" />
     <Compile Include="ObjectHelper.cs" />
     <Compile Include="RouteResolving\RouteResolverExtensions.cs" />

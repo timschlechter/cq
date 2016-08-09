@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.Serialization;
 
-namespace CQ.HttpApi
+namespace CQ.HttpApi.Client
 {
     [Serializable]
     public class HttpApiException : Exception
@@ -24,6 +24,8 @@ namespace CQ.HttpApi
             StreamingContext context) : base(info, context)
         {
         }
+
+        public string ErrorCode { get; set; }
 
         public HttpStatusCode StatusCode { get; set; }
     }

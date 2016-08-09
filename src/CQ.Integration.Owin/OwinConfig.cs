@@ -28,20 +28,19 @@ namespace CQ.Integration.Owin
             {
                 if (context.Request.Method == "POST")
                 {
-                    try
-                    {
-                        var commandType = GetCommandType(context);
+                    var commandType = GetCommandType(context);
 
-                        if (commandType != null)
+                    if (commandType != null)
+                    {
+                        Handle(context, () =>
                         {
                             var command = JsonSerializer.Deserialize(context.Request.Body, commandType);
 
                             handleCommand(command);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionHandler.Handle(ex);
+
+                            context.Response.StatusCode = 200;
+                            JsonSerializer.Serialize("", context.Response.Body);
+                        });
                     }
                 }
                 await next();
@@ -60,7 +59,7 @@ namespace CQ.Integration.Owin
 
                     if (queryType != null)
                     {
-                        try
+                        Handle(context, () =>
                         {
                             var eo = ObjectHelper.ExpandQueryString(context.Request.QueryString.Value);
 
@@ -68,16 +67,27 @@ namespace CQ.Integration.Owin
                             var result = handleQuery(query);
                             context.Response.ContentType = "application/json";
                             JsonSerializer.Serialize(result, context.Response.Body);
-                        }
-                        catch (Exception ex)
-                        {
-                            ExceptionHandler.Handle(ex);
-                        }
+                        });
                     }
                 }
                 await next();
             });
             return this;
+        }
+
+        private void Handle(IOwinContext context, Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                var statusCode = HttpStatusCodeResolver.Resolve(ex);
+                context.Response.StatusCode = (int)statusCode;
+                context.Response.ContentType = "application/json";
+                JsonSerializer.Serialize(new Error { Code = statusCode.ToString(), Message = ex.Message }, context.Response.Body);
+            }
         }
 
         private Type GetCommandType(IOwinContext context)
