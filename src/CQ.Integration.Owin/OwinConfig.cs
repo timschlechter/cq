@@ -49,12 +49,7 @@ namespace CQ.Integration.Owin
 
                 if (queryType != null)
                 {
-                    var parameters = context.Request.Query
-                        .ToDictionary(
-                            kvp => kvp.Key.EndsWith("[]") ? kvp.Key.Substring(0, kvp.Key.Length - 2) : kvp.Key,
-                            kvp => kvp.Key.EndsWith("[]") ? (object) kvp.Value : kvp.Value.FirstOrDefault());
-
-                    var eo = ObjectHelper.Expand(parameters);
+                    var eo = ObjectHelper.ExpandQueryString(context.Request.QueryString.Value);
 
                     var query = JsonSerializer.MakeTyped((object) eo, queryType);
                     var result = handleQuery(query);
