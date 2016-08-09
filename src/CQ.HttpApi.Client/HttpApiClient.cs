@@ -81,7 +81,7 @@ namespace CQ.HttpApi.Client
                 var response = task.Result;
 
                 var status = (int) response.StatusCode;
-                if (status < 200 && status >= 400)
+                if (status < 200 || status >= 400)
                 {
                     throw new HttpApiException(response.StatusDescription) {StatusCode = response.StatusCode};
                 }
