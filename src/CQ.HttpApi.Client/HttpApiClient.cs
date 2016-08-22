@@ -55,7 +55,7 @@ namespace CQ.HttpApi.Client
             return ExecuteRequest<object>(req);
         }
 
-        public virtual Task<TResult> ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
+        public virtual Task<TResult> ExecuteQuery<TResult>(IQuery<TResult> query)
         {
             var path = _config.QueryRouteResolver.ResolvePath(query);
             var req = new RestRequest(path, Method.GET);

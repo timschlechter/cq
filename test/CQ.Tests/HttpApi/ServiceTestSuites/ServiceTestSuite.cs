@@ -105,9 +105,9 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
             }
         }
 
-        protected TResult ExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
+        protected TResult ExecuteQuery<TResult>(IQuery<TResult> query)
         {
-            var task = _httpApiClient.ExecuteQuery<TQuery, TResult>(query);
+            var task = _httpApiClient.ExecuteQuery(query);
 
             task.Wait();
 
@@ -242,7 +242,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
                 FixedResult = new List<int> {3, 4, 5}
             };
 
-            ExecuteQuery<IntegerListQuery, IList<int>>(query);
+            ExecuteQuery(query);
 
             QueryShouldBeHandled(query);
             NumberOfHandledQueriesShouldBe(1);
@@ -253,7 +253,7 @@ namespace CQ.HttpApi.Tests.HttpApi.ServiceTestSuites
         {
             var query = new IntQuery {FixedResult = 1};
 
-            ExecuteQuery<IntQuery, int>(query);
+            ExecuteQuery(query);
 
             QueryShouldBeHandled(query);
             NumberOfHandledQueriesShouldBe(1);
