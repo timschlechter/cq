@@ -8,7 +8,7 @@ namespace CQ
 {
     public static class ContainerExtensions
     {
-        public static void RegisterCommandHandlers(this Container container, IEnumerable<Assembly> assemblies, params Type[] decorators)
+        public static void RegisterCommandHandlers(this Container container, IEnumerable<Assembly> assemblies)
         {
             container.Register(typeof(ICommandHandler<>), assemblies);
         }
@@ -18,7 +18,17 @@ namespace CQ
             container.RegisterDecorator(typeof(ICommandHandler<>), decoratorType);
         }
 
-        public static void RegisterQueryHandlers(this Container container, IEnumerable<Assembly> assemblies, params Type[] decorators)
+        public static void RegisterEventHandlers(this Container container, IEnumerable<Assembly> assemblies)
+        {
+            container.RegisterCollection(typeof(IEventHandler<>), assemblies);
+        }
+
+        public static void DecorateEventHandlersWith(this Container container, Type decoratorType)
+        {
+            container.RegisterDecorator(typeof(IEventHandler<>), decoratorType);
+        }
+
+        public static void RegisterQueryHandlers(this Container container, IEnumerable<Assembly> assemblies)
         {
             container.Register(typeof(IQueryHandler<,>), assemblies);
         }
@@ -107,9 +117,9 @@ namespace CQ
                 .Where(instanceProducer => instanceProducer.ServiceType.ImplementsOpenGeneric(typeof(IQueryHandler<,>)));
         }
 
-        private static bool ImplementsOpenGeneric(this Type type, Type openGenericType)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == openGenericType;
-        }
+            private static bool ImplementsOpenGeneric(this Type type, Type openGenericType)
+            {
+                return type.IsGenericType && type.GetGenericTypeDefinition() == openGenericType;
+            }
     }
 }

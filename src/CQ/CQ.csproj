@@ -42,6 +42,7 @@
     <Compile Include="CommandHandlerDecorators\CommitUnitOfWorkCommandHandlerDecorator.cs" />
     <Compile Include="CommandHandlerDecorators\ValidationCommandHandlerDecorator.cs" />
     <Compile Include="CommandHandlerDecorators\TransactionCommandHandlerDecorator.cs" />
+    <Compile Include="IEventHandler.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="IQueryHandler.cs" />
