@@ -33,12 +33,12 @@ namespace Sample.Owin.SelfHost
             var container = new Container();
             container.Options.DefaultScopedLifestyle = new ExecutionContextScopeLifestyle();
 
-            container.RegisterCommandHandlers(CommandAssemblies);
-            container.DecorateCommandHandlersWith(typeof(ValidationCommandHandlerDecorator<>));
-            container.DecorateCommandHandlersWith(typeof(TransactionCommandHandlerDecorator<>));
+            container.Register(typeof(ICommandHandler<>), CommandAssemblies);
+            container.RegisterDecorator(typeof(ICommandHandler<>), typeof(ValidationCommandHandlerDecorator<>));
+            container.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionCommandHandlerDecorator<>));
 
-            container.RegisterQueryHandlers(QueryAssemblies);
-            container.DecorateQueryHandlersWith(typeof(ValidationQueryHandlerDecorator<,>));
+            container.Register(typeof(IQueryHandler<,>), QueryAssemblies);
+            container.RegisterDecorator(typeof(IQueryHandler<,>), typeof(ValidationQueryHandlerDecorator<,>));
 
             container.RegisterSingleton<SampleStorage>();
 
